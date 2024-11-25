@@ -6,6 +6,7 @@ import SearchPage from "./pages/SearchPage";
 import HomePage from "./pages/HomePage";
 import LayoutWeb from "./layout/LayoutWeb";
 import { routing } from "./config/routing";
+import ProfileEditPage from "./pages/ProfileEditPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="" element={<HomePage />} />
           <Route path={`${routing.search}`} element={<SearchPage />} />
           <Route path={`${routing.profile_view}`} element={<ProfilePage />} />
+          <Route path={`${routing.profile_edit}`} element={<ProfileEditPage />} />
         </Route>
 
       </Routes>

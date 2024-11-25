@@ -3,5 +3,6 @@ export const  routing = {
     abouts:"",
     contact:"",
     profile_view:"profile-view",
+    profile_edit:"profile-edit",
     search:"recherche",
 }

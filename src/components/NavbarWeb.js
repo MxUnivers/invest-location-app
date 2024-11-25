@@ -36,7 +36,7 @@ const NavbarWeb = () => {
                     </ul>
                     <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
 						<li class="no-pd dropdown">
-							<a href="#" class="addlist"><img src="assets/img/avatar.jpg"
+							<a href={`/${routing.profile_edit}`} class="addlist"><img src="assets/img/avatar.jpg"
 									class="img-responsive img-circle avater-img" alt="" /><strong>Daniel
 									Luke</strong></a>
                                     </li>
