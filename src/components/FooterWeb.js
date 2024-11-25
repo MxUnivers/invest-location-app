@@ -78,8 +78,8 @@ const FooterWeb = () => {
 
             </div>
             <div class="footer-copyright">
-                <p>Copyright@ 2019 Listing Hub Design By <a href="http://www.themezhub.com/" title="Themezhub"
-                    target="_blank">Themezhub</a></p>
+                <p>Copyright@ 2024 devélopper par  <a href="https://mon-portfolio-mxunivers.web.app" title="Themezhub"
+                    target="_blank">Aymar Bly</a></p>
             </div>
         </footer>
     )
