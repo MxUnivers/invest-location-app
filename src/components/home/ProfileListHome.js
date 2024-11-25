@@ -29,7 +29,7 @@ const ProfileListHome = () => {
 							</div>
 								<div class="listing-shot-caption">
 									<h4>Art & Design</h4>
-									<p class="listing-location">Bishop Avenue, New York</p>
+									<p class="listing-location">Cocody Saint Jean</p>
 									<a href="#" class="author-img-box"><img src={profilePictureDefault} class="img-responsive author"
 										alt="" /></a>
 								</div>
@@ -70,7 +70,7 @@ const ProfileListHome = () => {
 							</div>
 								<div class="listing-shot-caption">
 									<h4>Education</h4>
-									<p class="listing-location">Bishop Avenue, New York</p>
+									<p class="listing-location">Plateau Caisse tab</p>
 									<a href="#" class="author-img-box"><img src={profilePictureDefault} class="img-responsive author"
 										alt="" /></a>
 								</div>
@@ -112,7 +112,7 @@ const ProfileListHome = () => {
 							</div>
 								<div class="listing-shot-caption">
 									<h4>Documentary</h4>
-									<p class="listing-location">Bishop Avenue, New York</p>
+									<p class="listing-location">Abidjan Cocody</p>
 									<a href="#" class="author-img-box"><img src={profilePictureDefault} class="img-responsive author"
 										alt="" /></a>
 								</div>
