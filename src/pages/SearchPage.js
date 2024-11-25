@@ -78,9 +78,9 @@ function SearchPage(props) {
 
             <div class="row">
 
-              <div class="col-md-12 col-sm-12 no-padd">
-                <h3>What are you looking For?</h3>
-                <p>Search by keywords, category, location & filters</p>
+              <div className="col-md-12 col-sm-12 no-padd">
+                <h3 style={{ fontSize: "35px" }}>Que recherchez-vous ?</h3>
+                <p>Cherchez par mots-clés, catégorie, localisation et filtres</p>
               </div>
 
               <form class="form-verticle">
@@ -106,7 +106,7 @@ function SearchPage(props) {
                 <div class="row mrg-r-10 mrg-l-10">
 
                   <div class="col-md-12">
-                    <h5 class="mrg-bot-10">More Filters</h5>
+                    <h5 class="mrg-bot-10">Catégories</h5>
                   </div>
 
                   <div class="col-md-12" style={{ display: "flex", flexWrap: "wrap", justifyContent: "start" }}>
@@ -128,7 +128,7 @@ function SearchPage(props) {
 
                 <div class="row mrg-0">
                   <div class="col-md-12">
-                    <a href="#" class="btn theme-btn" title="Submit Listing">Search Place</a>
+                    <a href="#" class="btn theme-btn" title="Submit Listing">Rechercher</a>
                   </div>
                 </div>
 
@@ -138,7 +138,7 @@ function SearchPage(props) {
 
             <div class="row mrg-bot-20">
               <div class="col-md-12">
-                <h5>70 result Found</h5>
+                <h5>{listings.length} resultat trouvés</h5>
               </div>
             </div>
 
@@ -224,7 +224,7 @@ function SearchPage(props) {
                       width: "100%",
                       height: "100%",
                       objectFit: "cover",
-                      borderRadius:"50%"
+                      borderRadius: "50%"
                     }}
                   />
                   <h4>{selectedPlace ? selectedPlace.name : ""}</h4>
