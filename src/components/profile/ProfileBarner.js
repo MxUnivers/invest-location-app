@@ -1,4 +1,5 @@
 import React from 'react'
+import { profilePictureDefault } from '../../config/dataApi'
 
 const ProfileBarner = () => {
     return (
@@ -23,15 +24,15 @@ const ProfileBarner = () => {
                                     <div class="inside-rating buttons listing-rating theme-btn button-plain"><span
                                         class="value">9.7</span> <sup class="out-of">/10</sup></div>
                                 </li>
-                                <li><a href="#add-review" class="buttons btn-outlined medium add-review"><i
+                               {/* <li><a href="#add-review" class="buttons btn-outlined medium add-review"><i
                                     class="fa fa-comments-o"></i><span class="hidden-xs">Add review</span></a></li>
                                 <li><a href="#" data-listing-id="74" data-nonce="01a769d424" class="buttons btn-outlined"><i
-                                    class="fa fa-heart-o"></i><span class="hidden-xs">Bookmark</span> </a></li>
+                                    class="fa fa-heart-o"></i><span class="hidden-xs">Bookmark</span> </a></li> */}
                             </ul>
                         </div>
                         <div class="listing-owner hidden-xs hidden-sm">
                             <div class="listing-owner-avater">
-                                <img src="assets/img/avatar.jpg" class="img-responsive img-circle" alt="" />
+                                <img src={ profilePictureDefault} class="img-responsive img-circle" alt="" />
                             </div>
                             <div class="listing-owner-detail">
                                 <h4>Lucy Lukie</h4>

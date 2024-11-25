@@ -9,7 +9,7 @@ const TestimonialHome = () => {
         id: 1,
         name: "Jean Dupont",
         position: "Promoteur immobilier",
-        image: "assets/img/team3.jpg",
+        image: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
         description:
           "Ce site m'a permis de trouver rapidement des collaborateurs compétents pour mes projets immobiliers. Une expérience fluide et très satisfaisante.",
       },
@@ -17,7 +17,7 @@ const TestimonialHome = () => {
         id: 2,
         name: "Marie Durand",
         position: "Investisseur",
-        image: "assets/img/team4.jpg",
+        image: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
         description:
           "Grâce à cette plateforme, j'ai pu entrer en contact avec des promoteurs fiables et des opportunités d'investissement intéressantes. Je recommande vivement.",
       },
@@ -25,7 +25,7 @@ const TestimonialHome = () => {
         id: 3,
         name: "Paul Morel",
         position: "Chef d'entreprise",
-        image: "assets/img/team3.jpg",
+        image: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
         description:
           "En tant que chef d'entreprise, j'ai trouvé des collaborateurs qualifiés pour m'accompagner dans mes projets. Une solution indispensable pour les entrepreneurs.",
       },
@@ -33,7 +33,7 @@ const TestimonialHome = () => {
         id: 4,
         name: "Claire Bernard",
         position: "Collaboratrice",
-        image: "assets/img/team4.jpg",
+        image: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
         description:
           "Travailler avec des promoteurs et investisseurs via cette plateforme a été une excellente expérience. Un service efficace et intuitif.",
       },

@@ -1,6 +1,6 @@
 import React from "react";
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from "google-maps-react";
-import { profiles } from "../../config/dataApi";
+import { categoriesSecteurs, profiles, villesCoteDIvoire } from "../../config/dataApi";
 
 export function ProfileMapList({ google }) {
   const [selectedProfile, setSelectedProfile] = React.useState(null);
@@ -34,9 +34,9 @@ export function ProfileMapList({ google }) {
           <div id="main-full-map">
             <Map
               google={google}
-              zoom={2}
+              zoom={12}
               style={mapStyles}
-              initialCenter={{ lat: 20, lng: 0 }}
+              initialCenter={{ lat: 5.345317, lng: -4.024429 }}
             >
               {/* Ajout des marqueurs */}
               {profiles.map((profile) => (
@@ -46,7 +46,7 @@ export function ProfileMapList({ google }) {
                     lat: profile.location.latitude,
                     lng: profile.location.longitude,
                   }}
-                  
+
                   onClick={() => onMarkerClick(profile)}
                   icon={{
                     url: profile.photo,
@@ -98,15 +98,28 @@ export function ProfileMapList({ google }) {
               <input
                 type="text"
                 className="form-control left-radius right-br"
-                placeholder="Keywords.."
+                placeholder="Mot clé"
               />
             </div>
             <div className="col-md-3 col-sm-3 no-padd">
-              <input
-                type="text"
-                className="form-control right-br"
-                placeholder="Location.."
-              />
+              <select
+                className="selectpicker form-control"
+                data-live-search="true"
+              >
+                <option data-tokens="ketchup mustard">
+                  Choisir localité
+                </option>
+                {
+                  villesCoteDIvoire.map((item) => {
+                    return (
+                      <option value={item} data-tokens="ketchup mustard">
+                        {item}
+                      </option>
+                    )
+                  })
+                }
+
+              </select>
             </div>
             <div className="col-md-3 col-sm-3 no-padd">
               <select
@@ -116,12 +129,16 @@ export function ProfileMapList({ google }) {
                 <option data-tokens="ketchup mustard">
                   Choisir categorie
                 </option>
-                <option data-tokens="mustard">
-                  Burger, Shake and a Smile
-                </option>
-                <option data-tokens="frosting">
-                  Sugar, Spice and all things nice
-                </option>
+                {
+                  categoriesSecteurs.map((item) => {
+                    return (
+                      <option value={item.value} data-tokens="ketchup mustard">
+                        {item.name}
+                      </option>
+                    )
+                  })
+                }
+
               </select>
             </div>
             <div className="col-md-2 col-sm-2 no-padd">
@@ -129,12 +146,15 @@ export function ProfileMapList({ google }) {
                 type="button"
                 className="btn theme-btn btn-default height-50 full-width"
               >
-                Search
+                Rechercher
               </button>
             </div>
           </form>
         </div>
       </div>
+
+
+
     </>
   );
 }

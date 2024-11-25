@@ -1,6 +1,7 @@
 import React from 'react'
 import { MdStarBorder, MdStarRate } from "react-icons/md";
 import { GoogleApiWrapper, Map, Marker } from "google-maps-react";
+import { profilePictureDefault } from '../../config/dataApi';
 
 // Remplacez par votre propre clé API Google Maps
 const mapStyles = {
@@ -21,21 +22,21 @@ export const ProfileSideBarLeft = (props) => {
     const reviews = [
         {
             author: "Lucas Dupont",
-            avatar: "assets/img/user-1.png",
+            avatar: profilePictureDefault,
             stars: 4, // Nombre d'étoiles
             date: "il y a 4 semaines",
             content: "Le service est excellent et très réactif. L'équipe a répondu à toutes mes questions rapidement. Cependant, j'ai rencontré quelques problèmes techniques au début, mais ils ont été résolus rapidement.",
         },
         {
             author: "Sophie Martin",
-            avatar: "assets/img/user-2.jpg",
+            avatar: profilePictureDefault,
             stars: 3,
             date: "il y a 3 semaines",
             content: "Le produit est bon dans l'ensemble, mais il y a quelques améliorations possibles. Je recommande quand même pour ceux qui cherchent une solution simple et efficace.",
         },
         {
             author: "Paul Leblanc",
-            avatar: "assets/img/user-3.jpg",
+            avatar: profilePictureDefault,
             stars: 5,
             date: "il y a 2 semaines",
             content: "Une expérience parfaite ! Tout a été conforme à mes attentes, et j'ai apprécié le suivi après-vente. Je recommande vivement ce service à tout le monde.",

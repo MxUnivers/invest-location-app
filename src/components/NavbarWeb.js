@@ -1,6 +1,10 @@
 import React from 'react'
 import { routing } from '../config/routing'
 import { useLocation } from 'react-router-dom'
+import { profilePictureDefault } from '../config/dataApi';
+import {MdOutlineSearch} from "react-icons/md";
+
+
 
 const NavbarWeb = () => {
     const location = useLocation();
@@ -22,22 +26,17 @@ const NavbarWeb = () => {
 
                 <div class="collapse navbar-collapse" id="navbar-menu">
                     <ul class="nav navbar-nav navbar-center" data-in="fadeInDown" data-out="fadeOutUp">
-                        <li class={` ${location.pathname === `/` ? "active" : ""}`}>
+                        {/*<li class={` ${location.pathname === `/` ? "active" : ""}`}>
                             <a href="/" class="dropdown-toggle" >Accueil</a>
-
-                        </li>
+                        </li> */}
                         <li class={` ${location.pathname === `/${routing.search}` ? "active" : ""}`}>
-                            <a href={`/${routing.search}`} class="dropdown-toggle" >Rechercher</a>
-
+                            <a href={`/${routing.search}`} class="dropdown-toggle" ><MdOutlineSearch size={25} /></a>
                         </li>
-
-
-                        <li><a href="javascript:void(0)" data-toggle="modal" data-target="#signin">Connexion</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
 						<li class="no-pd dropdown">
-							<a href={`/${routing.profile_edit}`} class="addlist"><img src="assets/img/avatar.jpg"
-									class="img-responsive img-circle avater-img" alt="" /><strong>Profile</strong></a>
+							<a  href="javascript:void(0)" data-toggle="modal" data-target="#signin" class="addlist"><img src={profilePictureDefault}
+									class="img-responsive img-circle avater-img" alt="" /><strong style={{ opacity:"0" }}>{"Profile"}</strong></a>
                                     </li>
 
                     </ul>

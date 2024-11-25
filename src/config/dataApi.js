@@ -1,98 +1,107 @@
 // src/data/profiles.js
+
+export const  profilePictureDefault="https://cdn-icons-png.freepik.com/512/8742/8742495.png"
+
+
+
+export const villesCoteDIvoire = [
+    "Abidjan", // Capitale économique
+    "Yamoussoukro", // Capitale politique
+    "Bouaké", // Deuxième plus grande ville
+    "San Pedro", // Port d'exportation majeur
+    "Korhogo", // Centre culturel du nord
+    "Man", // Ville de l'ouest, célèbre pour ses montagnes
+    "Daloa", // Centre agricole
+    "Abengourou", // Ville de l'est, réputée pour ses plantations de cacao
+    "Gagnoa", // Ville du centre-ouest, connue pour l'agriculture
+    "Touba", // Ville du nord-ouest, connue pour sa diversité culturelle
+  ];
+  
+
+
 export const profiles = [
-    {
+  {
       id: 1,
       firstName: "Jean",
       lastName: "Dupont",
       profession: "Développeur Web",
       category: "IT",
-      photo: "https://randomuser.me/api/portraits/men/1.jpg",
-      location: { latitude: 48.8566, longitude: 2.3522 }, // Paris
-    },
-    {
+      photo: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
+      location: { latitude: 5.3249, longitude: -4.0268 }, // Cocody
+  },
+  {
       id: 2,
       firstName: "Marie",
       lastName: "Curie",
       profession: "Scientifique",
       category: "Recherche",
-      photo: "https://randomuser.me/api/portraits/women/2.jpg",
-      location: { latitude: 51.5074, longitude: -0.1278 }, // Londres
-    },
-    {
+      photo: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
+      location: { latitude: 5.3097, longitude: -4.0122 }, // Plateau
+  },
+  {
       id: 3,
       firstName: "Ahmed",
       lastName: "Ali",
       profession: "Ingénieur",
       category: "Construction",
-      photo: "https://randomuser.me/api/portraits/men/3.jpg",
-      location: { latitude: 34.0522, longitude: -118.2437 }, // Los Angeles
-    },
-    {
+      photo: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
+      location: { latitude: 5.3534, longitude: -4.0083 }, // Marcory
+  },
+  {
       id: 4,
       firstName: "Sophie",
       lastName: "Martin",
       profession: "Designer",
       category: "Art",
-      photo: "https://randomuser.me/api/portraits/women/4.jpg",
-      location: { latitude: 35.6895, longitude: 139.6917 }, // Tokyo
-    },
-    {
+      photo: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
+      location: { latitude: 5.3706, longitude: -4.0199 }, // Treichville
+  },
+  {
       id: 5,
       firstName: "John",
       lastName: "Doe",
       profession: "Photographe",
       category: "Créatif",
-      photo: "https://randomuser.me/api/portraits/men/5.jpg",
-      location: { latitude: 40.7128, longitude: -74.006 }, // New York
-    },
-    {
+      photo: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
+      location: { latitude: 5.3318, longitude: -4.0053 }, // Adjamé
+  },
+  {
       id: 6,
       firstName: "Emma",
       lastName: "Johnson",
       profession: "Marketing",
       category: "Commerce",
-      photo: "https://randomuser.me/api/portraits/women/6.jpg",
-      location: { latitude: 19.076, longitude: 72.8777 }, // Mumbai
-    },
-    {
+      photo: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
+      location: { latitude: 5.3238, longitude: -3.9746 }, // Yopougon
+  },
+  {
       id: 7,
       firstName: "Lucas",
       lastName: "Nguyen",
       profession: "Médecin",
       category: "Santé",
-      photo: "https://randomuser.me/api/portraits/men/7.jpg",
-      location: { latitude: -33.8688, longitude: 151.2093 }, // Sydney
-    },
-    {
+      photo: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
+      location: { latitude: 5.3580, longitude: -3.9818 }, // Abobo
+  },
+  {
       id: 8,
       firstName: "Alice",
       lastName: "Brown",
       profession: "Enseignante",
       category: "Éducation",
-      photo: "https://randomuser.me/api/portraits/women/8.jpg",
-      location: { latitude: -23.5505, longitude: -46.6333 }, // São Paulo
-    },
-    {
+      photo: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
+      location: { latitude: 5.3566, longitude: -3.9430 }, // Bingerville
+  },
+  {
       id: 9,
       firstName: "Mohamed",
-      lastName: "Hassan",
-      profession: "Avocat",
-      category: "Droit",
-      photo: "https://randomuser.me/api/portraits/men/9.jpg",
-      location: { latitude: 30.0444, longitude: 31.2357 }, // Le Caire
-    },
-    {
-      id: 10,
-      firstName: "Chloe",
-      lastName: "Smith",
-      profession: "Chef",
-      category: "Restauration",
-      photo: "https://randomuser.me/api/portraits/women/10.jpg",
-      location: { latitude: 55.7558, longitude: 37.6173 }, // Moscou
-    },
-  ];
-  
-  
+      lastName: "Koné",
+      profession: "Consultant",
+      category: "Business",
+      photo: "https://cdn-icons-png.freepik.com/512/8742/8742495.png",
+      location: { latitude: 5.3015, longitude: -3.9717 }, // Port-Bouët
+  }
+];
 
 
   export const categoriesSecteurs = [

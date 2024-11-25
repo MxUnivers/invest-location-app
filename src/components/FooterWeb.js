@@ -42,7 +42,7 @@ const FooterWeb = () => {
                                 <div class="address-box">
                                     
                                     <div class="sing-add">
-                                        <i class="ti-email"></i>aymarbly559@gmail.com
+                                        <i class="ti-email"></i>info@emploijeunes.ci
                                     </div>
                                     <div class="sing-add">
                                         <i class="ti-mobile"></i>+225 0595387052
@@ -79,7 +79,7 @@ const FooterWeb = () => {
             </div>
             <div class="footer-copyright">
                 <p>Copyright@ 2024 devélopper par  <a href="https://mon-portfolio-mxunivers.web.app" title="Themezhub"
-                    target="_blank">Aymar Bly</a></p>
+                    target="_blank">Agence emplois Jeunes</a></p>
             </div>
         </footer>
     )
