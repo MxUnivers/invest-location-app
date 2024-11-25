@@ -1,4 +1,5 @@
 import React from 'react'
+import { routing } from '../config/routing'
 
 const FooterWeb = () => {
     return (
@@ -8,9 +9,9 @@ const FooterWeb = () => {
 
                     <div class="col-md-3 col-sm-6">
                         <div class="footer-widget">
-                            <h3 class="widgettitle widget-title">About Us</h3>
-                            <p>We are Themez Hub A team of clean, creative & professionals delivering world-class HTML
-                                Templates to build a better & smart web.</p>
+                        <h3 class="widgettitle widget-title">À Propos de Nous</h3>
+                        <p>Nous connectons les professionnels du monde entier pour créer des collaborations significatives. Notre plateforme est dédiée à rapprocher les talents, entreprises et entrepreneurs pour construire ensemble des projets ambitieux et innovants.</p>
+                        
                             <a href="#" class="other-store-link">
                                 <div class="other-store-app">
                                     <div class="os-app-icon">
@@ -26,14 +27,10 @@ const FooterWeb = () => {
 
                     <div class="col-md-3 col-sm-6">
                         <div class="footer-widget">
-                            <h3 class="widgettitle widget-title">Popular Services</h3>
+                            <h3 class="widgettitle widget-title">Liens utiles</h3>
                             <ul class="footer-navigation sinlge">
-                                <li><a href="#">Home Version One</a></li>
-                                <li><a href="#">Home Version Two</a></li>
-                                <li><a href="#">Home Version Three</a></li>
-                                <li><a href="#">Listing Detail Page</a></li>
-                                <li><a href="#">Search Listing Page</a></li>
-                                <li><a href="#">Our Top Authors</a></li>
+                                <li><a href={`/${routing.home}`}>Accueil</a></li>
+                                <li><a href={`/${routing.search}`}>Recherche</a></li>
                             </ul>
                         </div>
                     </div>
@@ -41,20 +38,16 @@ const FooterWeb = () => {
                     <div class="col-md-3 col-sm-6">
                         <div class="footer-widget">
                             <div class="textwidget">
-                                <h3 class="widgettitle widget-title">Get In Touch</h3>
+                                <h3 class="widgettitle widget-title">Contact</h3>
                                 <div class="address-box">
+                                    
                                     <div class="sing-add">
-                                        <i class="ti-location-pin"></i>7744 North, New York
+                                        <i class="ti-email"></i>aymarbly559@gmail.com
                                     </div>
                                     <div class="sing-add">
-                                        <i class="ti-email"></i>support@listinghub.com
+                                        <i class="ti-mobile"></i>+225 0595387052
                                     </div>
-                                    <div class="sing-add">
-                                        <i class="ti-mobile"></i>+91 021 548 75958
-                                    </div>
-                                    <div class="sing-add">
-                                        <i class="ti-world"></i>www.themezhub.com
-                                    </div>
+                                    
                                 </div>
                                 <ul class="footer-social">
                                     <li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -69,11 +62,12 @@ const FooterWeb = () => {
 
                     <div class="col-md-3 col-sm-6">
                         <div class="footer-widget">
-                            <h3 class="widgettitle widget-title">Subscribe Newsletter</h3>
-                            <p>At Vero Eos Et Accusamus Et Iusto Odio Dignissimos Ducimus Qui Blanditiis</p>
+                        <h3 class="widgettitle widget-title">Abonnez-vous à notre Newsletter</h3>
+                        <p>Restez informé avec nos dernières nouvelles et mises à jour.</p>
+                        
 
                             <form class="sup-form">
-                                <input type="email" class="form-control sigmup-me" placeholder="Your Email Address"
+                                <input type="email" class="form-control sigmup-me" placeholder="Veillez entre votre addresse email"
                                     required="required"/>
                                     <button type="submit" class="btn" value="Get Started"><i
                                         class="fa fa-location-arrow"></i></button>

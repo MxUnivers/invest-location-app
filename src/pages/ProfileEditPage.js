@@ -67,11 +67,10 @@ const ProfileEditPage = () => {
                                                     {hours.map((hour) => (
                                                         <button
                                                             key={hour}
-                                                            className={`btn btn-sm ${
-                                                                schedule[day].includes(hour)
+                                                            className={`btn btn-sm ${schedule[day].includes(hour)
                                                                     ? 'btn-success'
                                                                     : 'btn-outline-secondary'
-                                                            }`}
+                                                                }`}
                                                             onClick={() => handleTimeToggle(day, hour)}
                                                         >
                                                             {hour}
@@ -106,6 +105,85 @@ const ProfileEditPage = () => {
                                 )}
                             </div>
                         </div>
+
+
+                        {/* Gestion de la galerie */}
+                        <div className="add-listing-box gallery-info mrg-bot-25 padd-bot-30 padd-top-25">
+                            <div className="listing-box-header">
+                                <i className="ti-gallery theme-cl"></i>
+                                <h3>Mettre à jour la Galerie</h3>
+                                <p>Ajoutez ou modifiez les photos de votre galerie.</p>
+                            </div>
+
+                            <form>
+                                <div className="row mrg-r-10 mrg-l-10">
+                                    <div className="col-sm-12">
+                                        <label>Ajouter des Images</label>
+                                        <input
+                                            type="file"
+                                            className="form-control"
+                                            accept="image/*"
+                                            multiple
+                                        />
+                                    </div>
+                                    <div className="col-sm-12">
+                                        <label>Galerie Actuelle</label>
+                                        <div className="gallery-preview">
+                                            {/* Placez ici les images déjà existantes */}
+                                            <img
+                                                src="https://via.placeholder.com/100"
+                                                alt="Prévisualisation"
+                                                className="img-thumbnail m-1"
+                                            />
+                                            <img
+                                                src="https://via.placeholder.com/100"
+                                                alt="Prévisualisation"
+                                                className="img-thumbnail m-1"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        {/* Formulaire pour mettre à jour les informations personnelles */}
+                        <div className="add-listing-box personal-info mrg-bot-25 padd-bot-30 padd-top-25">
+                            <div className="listing-box-header">
+                                <i className="ti-user theme-cl"></i>
+                                <h3>Informations Personnelles</h3>
+                                <p>Mettez à jour vos informations personnelles et coordonnées.</p>
+                            </div>
+
+                            <form>
+                                <div className="row mrg-r-10 mrg-l-10">
+                                    <div className="col-sm-6">
+                                        <label>Nom</label>
+                                        <input type="text" className="form-control" />
+                                    </div>
+                                    <div className="col-sm-6">
+                                        <label>Email</label>
+                                        <input type="email" className="form-control" />
+                                    </div>
+                                    <div className="col-sm-6">
+                                        <label>Téléphone</label>
+                                        <input type="tel" className="form-control" />
+                                    </div>
+                                    <div className="col-sm-6">
+                                        <label>Adresse</label>
+                                        <input type="text" className="form-control" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        {/* Bouton de soumission */}
+                        <div className="form-group text-center">
+                            <button className="btn btn-primary">Enregistrer les Modifications</button>
+                        </div>
+
+
+
+
                     </div>
                 </div>
             </section>

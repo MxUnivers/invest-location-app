@@ -2,6 +2,7 @@
 import React from "react";
 import { categoriesSecteurs } from "../config/dataApi";
 import { GoogleApiWrapper, Map, Marker, InfoWindow } from "google-maps-react";
+import { routing } from "../config/routing";
 
 // Remplacez votre propre clé API ici
 const mapStyles = {
@@ -144,7 +145,9 @@ function SearchPage(props) {
 
             <div className="row">
               {listings.map((listing) => (
-                <div className="col-md-6 col-sm-12" key={listing.id}>
+                <div className="col-md-6 col-sm-12" key={listing.id} onClick={()=>{
+                  window.location.href=`/${routing.profile_view}`;
+                }}>
                   <div className="listing-shot grid-style">
                     <a href="#">
                       <div className="listing-shot-img">
@@ -175,7 +178,7 @@ function SearchPage(props) {
                           ))}
                         </div>
                         <div className="col-md-5 col-sm-5 col-xs-6 pull-right">
-                          <a href="#" className="detail-link">Open Now</a>
+                          <a href={`/${routing.profile_view}`} className="detail-link">Detail</a>
                         </div>
                       </div>
                     </div>
