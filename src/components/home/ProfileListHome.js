@@ -1,4 +1,5 @@
 import React from 'react'
+import { routing } from '../../config/routing'
 
 const ProfileListHome = () => {
     return (
@@ -14,10 +15,13 @@ const ProfileListHome = () => {
 				</div>
 
 				<div class="row">
+
+
+
 					<div class="col-md-4 col-sm-6">
 						<div class="listing-shot grid-style style-2">
-							<div class="listing-badge now-open">Now Open</div>
-							<a href="listing-detail.html">
+							{/*<div class="listing-badge now-open">Now Open</div> */}
+							<a href={`/${routing.profile_view}`}>
 								<div class="listing-shot-img">
 									<img src="assets/img/category/art.jpg" class="img-responsive" alt=""/>
 									<span class="approve-listing"><i class="fa fa-check"></i></span>
@@ -51,16 +55,19 @@ const ProfileListHome = () => {
 										<i class="fa fa-star" aria-hidden="true"></i>
 									</div>
 									<div class="col-md-5 col-sm-5 col-xs-6 pull-right">
-										<a href="listing-detail.html" class="detail-link">Open Now</a>
+										<a href={`/${routing.profile_view}`} class="detail-link">Détail</a>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 
+
+
+
 					<div class="col-md-4 col-sm-6">
 						<div class="listing-shot grid-style style-2">
-							<a href="listing-detail.html">
+							<a href={`/${routing.profile_view}`}>
 								<div class="listing-shot-img">
 									<img src="assets/img/category/education.jpg" class="img-responsive" alt=""/>
 									<span class="like-listing"><i class="fa fa-heart-o" aria-hidden="true"></i></span>
@@ -93,16 +100,19 @@ const ProfileListHome = () => {
 										<i class="fa fa-star" aria-hidden="true"></i>
 									</div>
 									<div class="col-md-5 col-sm-5 col-xs-6 pull-right">
-										<a href="listing-detail.html" class="detail-link">Open Now</a>
+										<a href={`/${routing.profile_view}`} class="detail-link">Détail</a>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 
+
+
+					
 					<div class="col-md-4 col-sm-6">
 						<div class="listing-shot grid-style style-2">
-							<a href="listing-detail.html">
+							<a href={`/${routing.profile_view}`}>
 								<div class="listing-shot-img">
 									<img src="assets/img/category/documentry.jpg" class="img-responsive" alt=""/>
 									<span class="approve-listing"><i class="fa fa-check"></i></span>
@@ -136,7 +146,7 @@ const ProfileListHome = () => {
 										<i class="fa fa-star" aria-hidden="true"></i>
 									</div>
 									<div class="col-md-5 col-sm-5 col-xs-6 pull-right">
-										<a href="listing-detail.html" class="detail-link">Open Now</a>
+										<a href={`/${routing.profile_view}`} class="detail-link">Détail</a>
 									</div>
 								</div>
 							</div>

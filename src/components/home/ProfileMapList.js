@@ -46,9 +46,10 @@ export function ProfileMapList({ google }) {
                     lat: profile.location.latitude,
                     lng: profile.location.longitude,
                   }}
+                  
                   onClick={() => onMarkerClick(profile)}
                   icon={{
-                    url: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+                    url: profile.photo,
                     scaledSize: new google.maps.Size(40, 40), // Taille personnalisée
                   }}
                 />
@@ -113,7 +114,7 @@ export function ProfileMapList({ google }) {
                 data-live-search="true"
               >
                 <option data-tokens="ketchup mustard">
-                  Choose Category
+                  Choisir categorie
                 </option>
                 <option data-tokens="mustard">
                   Burger, Shake and a Smile
