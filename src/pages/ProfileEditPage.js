@@ -5,6 +5,15 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css"; // Importation des styles par défaut de Quill
 
 import { fetchCodePostalsAll } from '../actions/request/CodePostalRequest';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import { baseurl } from '../config/baseurl';
+import { FETCH_USER_FAILURE, FETCH_USER_REQUEST, FETCH_USER_SUCCESS } from '../app/actions/actions';
+import { localStorageKeys } from '../config/localvalue';
+import { getAndCheckLocalStorage } from '../config/localvalueFuction';
+import { UserUpdateById } from '../actions/request/UserRequest';
+import { handleImageUploadCloud } from '../actions/upload/UploadFileCloud';
+import { MdClose } from 'react-icons/md';
 
 
 const ProfileEditPage = () => {
@@ -18,6 +27,7 @@ const ProfileEditPage = () => {
     // Charger les codes postaux au montage du composant
     useEffect(() => {
         dispatch(fetchCodePostalsAll());
+        dispatch(fetchUserByGet())
     }, [dispatch]);
 
 
@@ -43,6 +53,51 @@ const ProfileEditPage = () => {
 
 
 
+
+    function fetchUserByGet() {
+        return async (dispatch) => {
+            dispatch({ type: FETCH_USER_REQUEST });
+            await axios.get(
+                `${baseurl.url}/api/v1/users/get_user/${getAndCheckLocalStorage(localStorageKeys.userId)}`
+
+                , {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `${baseurl.TypeToken} ${baseurl.token}`
+                    }
+                }).then((response) => {
+                    console.log(response.data.data);
+                    const responseData = response.data.data;
+                    dispatch({ type: FETCH_USER_SUCCESS, payload: response.data.data });
+                    setFormData(
+                        {
+                            firstname: responseData?.firstname,
+                            lastname: responseData?.lastname,
+                            email: responseData?.email,
+                            phone: responseData?.phone,
+                            codePostal: responseData?.codePostal,
+                            profilePicture: responseData?.profilePicture,
+                            profession: responseData?.profession,
+                            address: responseData?.address,
+                            schedule: responseData?.schedule,
+                            images: responseData?.images,
+                            description: responseData?.description,
+                            lat: responseData?.lat,
+                            lng: responseData?.lng,
+                        }
+                    )
+                    setPickupLocation(responseData?.address)
+                })
+                .catch((error) => {
+                    dispatch({ type: FETCH_USER_FAILURE, payload: error.message })
+                    console.log(error);
+                });
+        }
+    }
+
+
+
+
     const [schedule, setSchedule] = useState({});
     const daysOfWeek = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
     const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
@@ -61,37 +116,134 @@ const ProfileEditPage = () => {
 
 
     // Gestion de l'ajout des images
-    const handleImageUpload = (e) => {
-        const files = Array.from(e.target.files);
-        const newImages = files.map((file) => URL.createObjectURL(file)); // Crée des URLs pour prévisualiser
+    const handleImageUpload = async (e) => {
+        const files = e.target.files;
+        const newImages =  await handleImageUploadCloud(files,toast);
         setFormData({
             ...formData,
             images: [...formData.images, ...newImages], // Ajoute les nouvelles images au tableau existant
         });
     };
 
-    // Gestion des horaires
+    // Mise à jour de la disponibilité (jours et horaires)
     const handleDayClick = (day) => {
-
-        setSchedule((prev) => ({
+        setFormData((prev) => ({
             ...prev,
-            [day]: prev[day] || [], // Initialise un tableau vide si non défini
+            schedule: {
+                ...prev.schedule,
+                [day]: prev.schedule[day] ? undefined : [], // Si déjà sélectionné, on désélectionne
+            },
         }));
-        setFormData({ ...formData, schedule: schedule })
     };
 
     const handleTimeToggle = (day, hour) => {
-        setSchedule((prev) => {
-            const updatedDay = prev[day] || [];
+        setFormData((prev) => {
+            const updatedDay = prev.schedule[day] || [];
             const updatedHours = updatedDay.includes(hour)
                 ? updatedDay.filter((h) => h !== hour) // Retirer l'heure
                 : [...updatedDay, hour]; // Ajouter l'heure
 
-            return { ...prev, [day]: updatedHours };
+            return {
+                ...prev,
+                schedule: { ...prev.schedule, [day]: updatedHours },
+            };
         });
-
-        setFormData({ ...formData, schedule: schedule })
     };
+
+
+
+
+
+
+
+
+
+
+    const [pickupLocation, setPickupLocation] = useState('');
+    const [pickupSuggestions, setPickupSuggestions] = useState([]);
+
+    // Obtenir les suggestions de lieu de départ
+    const getPlacesByCountryStartLocation = async (query) => {
+        try {
+            const response = await axios.get(`${baseurl.url}/api/v1/places`, {
+                params: { query: query },
+            });
+            const places = response.data.results;
+            return places.map(place => place);
+        } catch (error) {
+            console.error("Erreur lors de la récupération des lieux : ", error);
+        }
+    };
+    const handlePickupLocationChange = async (e) => {
+        const value = e.target.value;
+        setPickupLocation(value);
+        if (value.length > 2) {
+            const suggestions = await getPlacesByCountryStartLocation(value);
+            setPickupSuggestions(suggestions);
+        } else {
+            setPickupSuggestions([]); // Réinitialiser la liste des suggestions
+        }
+    };
+    const handlePickupSelection = (suggestion) => {
+        // Met à jour le pickupLocation
+        setPickupLocation(`${suggestion.name} - ${suggestion.formatted_address}`);
+
+        // Met à jour newVehicle en une seule fois avec toutes les nouvelles valeurs
+        setFormData(prevState => ({
+            ...prevState,
+            address: `${suggestion.name} - ${suggestion.formatted_address}`,
+            lat: suggestion?.geometry?.location?.lat,
+            lng: suggestion?.geometry?.location?.lng
+        }));
+        // Vérifie les valeurs dans suggestion
+        // console.log(suggestion?.geometry?.location?.lat); // Affiche la latitude
+        // console.log(suggestion?.geometry?.location?.lng); // Affiche la longitude
+        // console.log(`${suggestion.name} - ${suggestion.formatted_address}`); // Affiche l'adresse complète
+
+        // Vide les suggestions après la sélection
+        setPickupSuggestions([]);
+    };
+
+    const handleCleanSugestions = () => {
+        setPickupSuggestions([]);
+    }
+
+
+
+
+
+
+
+
+
+
+    // Fonction pour valider les champs requis
+    const validateForm = () => {
+        const { firstname, lastname, email, phone, codePostal, description, address } = formData;
+        console.log(formData)
+        if (!firstname || !lastname || !email || !phone || !codePostal || !description || !address) {
+            return false;
+        }
+        return true;
+    };
+
+
+    // Fonction pour envoyer les données à l'API
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
+            toast.error("Tous les champs avec *  doivent être remplis.", { position: "bottom-right" });
+            return;
+        }
+        // toast.success("Tous les champs avec *  doivent être remplis .", { position: "bottom-right" });
+        dispatch(UserUpdateById(getAndCheckLocalStorage(localStorageKeys.userId), formData, toast))
+    };
+
+
+
+
+
 
 
     return (
@@ -112,14 +264,14 @@ const ProfileEditPage = () => {
             </section>
             <div className="clearfix"></div>
 
-            <section>
+            <section onClick={handleCleanSugestions}>
                 <div className="container-fluid">
                     <div className="col-md-10 col-sm-12 col-md-offset-1 mob-padd-0">
 
                         {/* Gestion des créneaux horaires */}
 
                         <Row>
-                            <Col md={6} >
+                            <Col md={6}>
                                 <div className="add-listing-box schedule-info mrg-bot-25 padd-bot-30 padd-top-25">
                                     <div className="listing-box-header">
                                         <i className="ti-time theme-cl"></i>
@@ -128,22 +280,21 @@ const ProfileEditPage = () => {
                                     </div>
 
                                     <div className="row">
-                                        {/* Liste des jours */}
                                         {daysOfWeek.map((day) => (
                                             <div key={day} className="col-sm-4">
                                                 <div className="day-selector">
                                                     <button
-                                                        className={`btn ${schedule[day] ? 'btn-primary' : 'btn-default'}`}
+                                                        className={`btn ${formData.schedule[day] ? 'btn-primary' : 'btn-default'}`}
                                                         onClick={() => handleDayClick(day)}
                                                     >
                                                         {day}
                                                     </button>
-                                                    {schedule[day] && (
+                                                    {formData.schedule[day] && (
                                                         <div className="hour-selector">
                                                             {hours.map((hour) => (
                                                                 <button
                                                                     key={hour}
-                                                                    className={`btn btn-sm ${schedule[day].includes(hour)
+                                                                    className={`btn btn-sm ${formData.schedule[day].includes(hour)
                                                                         ? 'btn-success'
                                                                         : 'btn-outline-secondary'
                                                                         }`}
@@ -162,8 +313,6 @@ const ProfileEditPage = () => {
                             </Col>
 
                             <Col md={6}>
-
-                                {/* Affichage du planning */}
                                 <div className="add-listing-box schedule-summary mrg-bot-25 padd-bot-30 padd-top-25">
                                     <div className="listing-box-header">
                                         <i className="ti-calendar theme-cl"></i>
@@ -171,11 +320,11 @@ const ProfileEditPage = () => {
                                         <p>Voici un aperçu des créneaux sélectionnés</p>
                                     </div>
                                     <div>
-                                        {Object.keys(schedule).length === 0 ? (
+                                        {Object.keys(formData.schedule).length === 0 ? (
                                             <p>Aucune disponibilité sélectionnée.</p>
                                         ) : (
                                             <ul>
-                                                {Object.entries(schedule).map(([day, times]) => (
+                                                {Object.entries(formData.schedule).map(([day, times]) => (
                                                     <li key={day}>
                                                         <strong>{day} :</strong> {times.join(', ')}
                                                     </li>
@@ -185,7 +334,6 @@ const ProfileEditPage = () => {
                                     </div>
                                 </div>
                             </Col>
-
                         </Row>
 
 
@@ -212,15 +360,29 @@ const ProfileEditPage = () => {
                                     </div>
                                     <div className="col-sm-12">
                                         <label>Galerie Actuelle</label>
-                                        <div className="gallery-preview">
+                                        <div className="gallery-preview"  style={{ display: "flex", flexWrap: "wrap" }}>
                                             {/* Placez ici les images déjà existantes */}
                                             {formData.images.map((image, index) => {
                                                 return (
+                                                    <li key={index} className="p-1">
+                                                        <span className="text-danger text-xs" style={{ cursor: "pointer" }}
+                                                            onClick={() => {
+                                                                // On supprime l'image correspondant à l'index
+                                                                const updatedImages = formData.images.filter((_, i) => i !== index);
+                                                                setFormData({ ...formData, images: updatedImages });
+                                                            }}
+                                                        >
+                                                            <MdClose size={30} />
+                                                        </span>
+                                                        <div>
+
                                                     <img
                                                         src={image || "https://via.placeholder.com/100"}
                                                         alt="Prévisualisation"
                                                         className="img-thumbnail m-1" style={{ height: "100px", width: "100px" }}
                                                     />
+                                                    </div>
+                                                    </li>
                                                 )
                                             })}
 
@@ -239,10 +401,10 @@ const ProfileEditPage = () => {
                                 <p>Mettez à jour vos informations personnelles et coordonnées.</p>
                             </div>
 
-                            <form>
+                            <form onSubmit={handleSubmit}>
                                 <div className="row mrg-r-10 mrg-l-10">
                                     <div className="col-sm-6">
-                                        <label>Nom</label>
+                                        <label>Nom  <span className="text-danger">*</span></label>
                                         <input
                                             type="text"
                                             name="firstname"
@@ -253,7 +415,7 @@ const ProfileEditPage = () => {
                                     </div>
 
                                     <div className="col-sm-6">
-                                        <label>Prénoms</label>
+                                        <label>Prénoms  <span className="text-danger">*</span></label>
                                         <input
                                             type="text"
                                             name="firstname"
@@ -264,7 +426,7 @@ const ProfileEditPage = () => {
                                     </div>
 
                                     <div className="col-sm-6">
-                                        <label>Email</label>
+                                        <label>Email  <span className="text-danger">*</span></label>
                                         <input
                                             type="email"
                                             name="email"
@@ -275,7 +437,7 @@ const ProfileEditPage = () => {
                                     </div>
 
                                     <div className="col-sm-6">
-                                        <label>Téléphone</label>
+                                        <label>Téléphone  <span className="text-danger">*</span></label>
                                         <input
                                             type="tel"
                                             name="phone"
@@ -286,7 +448,7 @@ const ProfileEditPage = () => {
                                     </div>
 
                                     <div className="col-sm-6">
-                                        <label>Indicatif téléphone</label>
+                                        <label>Indicatif téléphone  <span className="text-danger">*</span></label>
                                         <select
                                             name="codePostal"
                                             className="form-control"
@@ -303,18 +465,32 @@ const ProfileEditPage = () => {
                                     </div>
 
                                     <div className="col-sm-6">
-                                        <label>Adresse</label>
+                                        <label>Adresse  <span className="text-danger">*</span></label>
                                         <input
                                             type="text"
                                             name="address"
                                             className="form-control"
-                                            value={formData.address} // Valeur actuelle
-                                            onChange={(e) => handleChange(e)} // Gestion des changements
+                                            value={pickupLocation} // Valeur actuelle
+                                            onChange={(e) => handlePickupLocationChange(e)} // Gestion des changements
                                         />
+                                        {pickupSuggestions && pickupSuggestions.length > 0 && (
+                                            <ul className="rounded p-1 border " style={{ position: 'absolute', border: "1px solid", zIndex: 1000, backgroundColor: 'white', maxwidth: "400px", listStyleType: 'none', padding: 0, maxHeight: "200px", overflow: "auto" }}>
+                                                {pickupSuggestions.map((suggestion, index) => (
+                                                    <li className="border border-b"
+                                                        key={index}
+                                                        style={{ padding: '5px', cursor: 'pointer', }}
+                                                        onClick={() => handlePickupSelection(suggestion)}
+                                                    >
+                                                        {`${suggestion.name} - ${suggestion.formatted_address}`}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+
                                     </div>
 
                                     <div className="col-sm-12">
-                                        <label>Description </label>
+                                        <label>Description  <span className="text-danger">*</span> </label>
                                         <ReactQuill
                                             theme="snow"
                                             value={formData.description}
@@ -324,12 +500,21 @@ const ProfileEditPage = () => {
                                         />
                                     </div>
                                 </div>
+
+
+                                <div className="form-group text-center mx-5 px-5">
+                                    {
+                                        loadingUser ?
+                                            <button type="button" className="btn btn-primary">chargement....</button>
+                                            :
+                                            <button type="submit" className="btn btn-primary">Enregistrer les Modifications</button>
+                                    }
+
+                                </div>
                             </form>
                         </div>
                         {/* Bouton de soumission */}
-                        <div className="form-group text-center">
-                            <button className="btn btn-primary">Enregistrer les Modifications</button>
-                        </div>
+
 
 
 
