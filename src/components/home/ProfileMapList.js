@@ -1,6 +1,7 @@
 import React from "react";
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from "google-maps-react";
 import { categoriesSecteurs, profiles, villesCoteDIvoire } from "../../config/dataApi";
+import { routing } from "../../config/routing";
 
 export function ProfileMapList({ google }) {
   const [selectedProfile, setSelectedProfile] = React.useState(null);
@@ -16,6 +17,7 @@ export function ProfileMapList({ google }) {
   const onMarkerClick = (profile, marker) => {
     setSelectedProfile(profile);
     setShowingInfoWindow(true);
+    window.location.href=`/${routing.profile_view}`
   };
 
   // Fonction pour fermer le popup d'info
