@@ -7,12 +7,14 @@ import codepostalReducer from './reducers/codepostalReducer';
 import adminReducer from './reducers/adminReducer';
 import categoryReducer from './reducers/categoryReducer';
 import publicationReducer from './reducers/publicationReducer';
+import regionReducer from './reducers/regionReducer';
 
 
 
 const rootReducer = combineReducers({
 
     categorys :categoryReducer,
+    regions :regionReducer,
     codepostals:codepostalReducer,
     language:languageReducer,
     publications:publicationReducer,

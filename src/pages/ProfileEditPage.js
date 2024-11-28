@@ -15,6 +15,8 @@ import { UserUpdateById } from '../actions/request/UserRequest';
 import { handleImageUploadCloud, handleImageUploadCloudOnly } from '../actions/upload/UploadFileCloud';
 import { MdClose } from 'react-icons/md';
 import { profilePictureDefault } from '../config/dataApi';
+import { fetchCategorysAll } from '../actions/request/CategoryRequest';
+import {  fetchRegionysAll } from '../actions/request/RegionRequest';
 
 
 const ProfileEditPage = () => {
@@ -24,9 +26,13 @@ const ProfileEditPage = () => {
 
     // Récupération des codes postaux et état de chargement
     const codepostals = useSelector((state) => state.codepostals.codepostals);
+    const categorys = useSelector((state) => state.categorys.categorys);
+    const regions = useSelector((state) => state.regions.regions);
     const loadingUser = useSelector((state) => state.users.loadingUser);
     // Charger les codes postaux au montage du composant
     useEffect(() => {
+        dispatch(fetchCategorysAll());
+        dispatch(fetchRegionysAll());
         dispatch(fetchCodePostalsAll());
         dispatch(fetchUserByGet())
     }, [dispatch]);
@@ -38,6 +44,8 @@ const ProfileEditPage = () => {
         companyName: '',
         email: '',
         phone: '',
+        category: '',
+        region: '',
         codePostal: '',
         description: "",
         images: [],
@@ -85,6 +93,9 @@ const ProfileEditPage = () => {
                             description: responseData?.description,
                             lat: responseData?.lat,
                             lng: responseData?.lng,
+                            companyName: responseData?.companyName,
+                            category: responseData?.category,
+                            region: responseData?.region,
                         }
                     )
                     setPickupLocation(responseData?.address)
@@ -275,7 +286,7 @@ const ProfileEditPage = () => {
                 <div className="container">
                     <div className="title-content">
                         <h1 style={{ fontSize: "35px" }}>Mis ajour de votre profile </h1>
-                        <div className="mt-5" style={{ marginTop:"50px" }}>
+                        <div className="mt-5" style={{ marginTop: "50px" }}>
                             <div>
                                 <button type="button" className="btn btn-primary mx-5 text-white">Voire mon profile</button>
                             </div>
@@ -283,7 +294,7 @@ const ProfileEditPage = () => {
                     </div>
                 </div>
             </section>
-            
+
             <div className="clearfix"></div>
 
             <section onClick={handleCleanSugestions}>
@@ -484,7 +495,7 @@ const ProfileEditPage = () => {
                                     <div className="col-sm-6">
                                         <label>Téléphone  <span className="text-danger">*</span></label>
                                         <input
-                                            type="tel"
+                                            type="number"
                                             name="phone"
                                             className="form-control"
                                             value={formData.phone} // Valeur actuelle
@@ -510,7 +521,7 @@ const ProfileEditPage = () => {
                                     </div>
 
                                     <div className="col-sm-6">
-                                        <label>Adresse  <span className="text-danger">*</span></label>
+                                        <label>Adresse ( Entreprise / personnel / Société ) <span className="text-danger">*</span></label>
                                         <input
                                             type="text"
                                             name="address"
@@ -534,14 +545,75 @@ const ProfileEditPage = () => {
 
                                     </div>
 
-                                    <div className="col-sm-12">
-                                        <label>Description  <span className="text-danger">*</span> </label>
+
+
+                                    <div className="col-sm-6">
+                                        <label>Localité  <span className="text-danger">*</span></label>
+                                        <select
+                                            name="region"
+                                            className="form-control"
+                                            value={formData.region}
+                                            onChange={(e) => handleChange(e)}
+                                        >
+                                            <option value="">-- Sélectionnez un indicatif --</option>
+                                            {regions.map((postal) => (
+                                                <option key={postal._id} value={postal._id}>
+                                                    {postal?.name || ""}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+                                    <div className="col-sm-6">
+                                        <label>Catégorie  <span className="text-danger">*</span></label>
+                                        <select
+                                            name="category"
+                                            className="form-control"
+                                            value={formData.category}
+                                            onChange={(e) => handleChange(e)}
+                                        >
+                                            <option value="">-- Sélectionnez un indicatif --</option>
+                                            {categorys.map((postal) => (
+                                                <option key={postal._id} value={postal._id}>
+                                                    {postal?.name || ""}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+
+
+                                    <div className="col-sm-6">
+                                        <label>Profession  <span className="text-danger">*</span></label>
+                                        <input
+                                            type="text"
+                                            name="profession"
+                                            className="form-control"
+                                            value={formData.profession} // Valeur actuelle
+                                            onChange={(e) => handleChange(e)} // Gestion des changements
+                                        />
+                                    </div>
+
+                                    <div className="col-sm-6">
+                                        <label>Entreprise  <span className="text-danger">*</span></label>
+                                        <input
+                                            type="text"
+                                            name="companyName"
+                                            className="form-control"
+                                            value={formData.companyName} // Valeur actuelle
+                                            onChange={(e) => handleChange(e)} // Gestion des changements
+                                        />
+                                    </div>
+
+
+
+                                    <div className="col-sm-12 mt-5" style={{ marginBottom:"100px" }}>
+                                        <label>Description (Activité ou votre profile )  <span className="text-danger">*</span> </label>
                                         <ReactQuill
                                             theme="snow"
                                             value={formData.description}
                                             onChange={handleDescriptionChange}
                                             placeholder="Ajoutez une description détaillée ici..."
-                                            style={{ height: "150px" }}
+                                            style={{ height: "200px" }}
                                         />
                                     </div>
                                 </div>

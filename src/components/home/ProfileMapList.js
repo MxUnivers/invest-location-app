@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from "google-maps-react";
-import { categoriesSecteurs, profiles, villesCoteDIvoire } from "../../config/dataApi";
+import { categoriesSecteurs, profilePictureDefault, villesCoteDIvoire } from "../../config/dataApi";
 import { routing } from "../../config/routing";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsersAll } from "../../actions/request/UserRequest";
 
 export function ProfileMapList({ google }) {
+
+  const dispatch = useDispatch();
+  const profiles = useSelector((state) => state.users.users);
+
+  useEffect(() => {
+    dispatch(fetchUsersAll());
+
+  }, [dispatch])
+
+
+
+
   const [selectedProfile, setSelectedProfile] = React.useState(null);
   const [showingInfoWindow, setShowingInfoWindow] = React.useState(false);
 
@@ -17,7 +31,7 @@ export function ProfileMapList({ google }) {
   const onMarkerClick = (profile, marker) => {
     setSelectedProfile(profile);
     setShowingInfoWindow(true);
-    window.location.href=`/${routing.profile_view}`
+    window.location.href = `/${routing.profile_view}/`+profile?._id
   };
 
   // Fonction pour fermer le popup d'info
@@ -43,15 +57,15 @@ export function ProfileMapList({ google }) {
               {/* Ajout des marqueurs */}
               {profiles.map((profile) => (
                 <Marker
-                  key={profile.id}
                   position={{
-                    lat: profile.location.latitude,
-                    lng: profile.location.longitude,
+                    lat: profile?.lat,
+                    lng: profile?.lng,
                   }}
+                  
 
                   onClick={() => onMarkerClick(profile)}
                   icon={{
-                    url: profile.photo,
+                    url: profile.profilePicture || profilePictureDefault,
                     scaledSize: new google.maps.Size(40, 40), // Taille personnalisée
                   }}
                 />
@@ -61,20 +75,20 @@ export function ProfileMapList({ google }) {
               {selectedProfile && (
                 <InfoWindow
                   position={{
-                    lat: selectedProfile.location.latitude,
-                    lng: selectedProfile.location.longitude,
+                    lat: selectedProfile?.lat,
+                    lng: selectedProfile?.lng,
                   }}
                   visible={showingInfoWindow}
                   onClose={onClose}
                 >
                   <div className="text-center">
                     <img
-                      src={selectedProfile.photo}
-                      alt={`${selectedProfile.firstName} ${selectedProfile.lastName}`}
+                      src={selectedProfile.profilePicture || profilePictureDefault}
+                      alt={`${selectedProfile.firstname} ${selectedProfile.firstname}`}
                       className="w-16 h-16 rounded-full mx-auto mb-2 shadow"
                     />
                     <h3 className="font-bold">
-                      {selectedProfile.firstName} {selectedProfile.lastName}
+                      {selectedProfile.firstname} {selectedProfile.firstname}
                     </h3>
                     <p className="text-sm text-gray-600">
                       {selectedProfile.profession}

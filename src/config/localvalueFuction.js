@@ -10,6 +10,7 @@ export const handleClearLocalStorage = () => {
     localStorage.removeItem(localStorageKeys.userId)
     localStorage.removeItem(localStorageKeys.userRole)
     localStorage.removeItem(localStorageKeys.userName)
+    window.location.reload();
     console.log('Deconnexion de la pplication ');
 };
 
