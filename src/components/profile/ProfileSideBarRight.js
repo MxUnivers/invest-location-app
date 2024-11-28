@@ -13,6 +13,9 @@ const ProfileSideBarRight = () => {
     const user = useSelector((state) => state.users.user);
 
 
+    const daysOfWeek = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+    const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+
 
     const params = useParams();
 
@@ -62,16 +65,18 @@ const ProfileSideBarRight = () => {
                     </div>
                     <div class="widget-boxed-body">
                         <div class="side-list">
-                            <ul>
-                                <li>Lundi <span>9h - 17h</span></li>
-                                <li>Mardi <span>9h - 17h</span></li>
-                                <li>Mercredi <span>9h - 17h</span></li>
-                                <li>Jeudi <span>9h - 17h</span></li>
-                                <li>Vendredi <span>9h - 17h</span></li>
-                                <li>Samedi <span>9h - 15h</span></li>
-                                <li>Dimanche <span>Fermé</span></li>
-
-                            </ul>
+                            {
+                                    Object.keys(user?.schedule|| {}).length === 0 ? (
+                                    <p>Aucun emplois du temps</p>
+                                ) : (
+                                    <ul>
+                                        {Object.entries(user?.schedule || {}).map(([day, times]) => (
+                                            <li key={day}>
+                                                <strong>{day} :</strong> {times.join(', ')}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                         </div>
                     </div>
                 </div>
