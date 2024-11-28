@@ -21,6 +21,8 @@ const ProfileBarner = () => {
         dispatch(fetchUserById(id || getAndCheckLocalStorage(localStorageKeys?.userId)));
     });
 
+    const  imageBgEmpty="assets/img/ville-abidjan.jpg"
+
 
 
 
@@ -29,7 +31,7 @@ const ProfileBarner = () => {
 
             <div class="clearfix"></div>
 
-            <section class="detail-section bg-image" style={{ background: `url(assets/img/slider-3.jpg)` }} data-overlay="6">
+            <section class="detail-section bg-image" style={{ background: `url(${  user && user?.images && user?.images.length > 0 ? user?.images[0] : imageBgEmpty })` }} data-overlay="6">
                 <div class="profile-cover-content">
                     <div class="container">
                         <div class="cover-buttons">

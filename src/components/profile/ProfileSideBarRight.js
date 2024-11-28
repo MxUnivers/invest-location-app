@@ -89,7 +89,7 @@ const ProfileSideBarRight = () => {
                         <div class="side-list no-border gallery-box">
                             <ul class="gallery-list">
                                 {
-                                    user?.images && user?.images.length > 0 &&
+                                    user?.images && user?.images?.length > 0 &&
                                     user?.images.map((item) => {
                                         return (
                                             <li>
