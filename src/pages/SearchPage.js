@@ -155,7 +155,7 @@ function SearchPage(props) {
             <div className="row">
               {listings.map((listing) => (
                 <div className="col-md-6 col-sm-12" onClick={() => {
-                  window.location.href = `/${routing.profile_view}`;
+                  window.location.href = `/${routing.profile_view}/${listing._id}`;
                 }}>
                   <div className="listing-shot grid-style">
                     <a href="#">
@@ -173,7 +173,11 @@ function SearchPage(props) {
                         <div className="col-md-12">
                           <div className="listing-detail-info">
                             <span><i className="fa fa-phone" aria-hidden="true"></i> {listing?.codePostal?.indicatif || ""}  {listing?.phone || ""}</span>
-                            <span><i className="fa fa-globe" aria-hidden="true"></i> {listing.website}</span>
+                            {
+                              listing?.category?.name &&
+                              <span><i className="fa fa-globe" aria-hidden="true"></i> {listing?.category?.name || ""}</span>
+                            }
+
                           </div>
                         </div>
                       </div>
@@ -182,12 +186,12 @@ function SearchPage(props) {
                       <div className="row extra">
                         <div className="col-md-7 col-sm-7 col-xs-6">
                           {[...Array(5)].map((_, i) => (
-                            <i key={i} className={i < Math.floor(listing.rating) ? "color fa fa-star" : "fa fa-star"}
+                            <i key={i} className={i < Math.floor(listing?.rating || 1) ? "color fa fa-star" : "fa fa-star"}
                               aria-hidden="true"></i>
                           ))}
                         </div>
                         <div className="col-md-5 col-sm-5 col-xs-6 pull-right">
-                          <a href={`/${routing.profile_view}`} className="detail-link">Detail</a>
+                          <button type="button" className="detail-link btn btn-primary">Detail</button>
                         </div>
                       </div>
                     </div>

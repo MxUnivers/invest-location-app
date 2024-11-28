@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { MdStarBorder, MdStarRate } from "react-icons/md";
 import { GoogleApiWrapper, Map, Marker } from "google-maps-react";
 import { profilePictureDefault } from '../../config/dataApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { fetchUserById, fetchUsersAll } from '../../actions/request/UserRequest';
+import { getAndCheckLocalStorage } from '../../config/localvalueFuction';
+import { localStorageData, localStorageKeys } from '../../config/localvalue';
+import { FETCH_USERS_REQUEST, FETCH_USER_SUCCESS } from '../../app/actions/actions';
+import { getDataFromFile } from '../../actions/DataLocal';
 
 // Remplacez par votre propre clé API Google Maps
 const mapStyles = {
@@ -13,9 +20,33 @@ const mapStyles = {
 export const ProfileSideBarLeft = (props) => {
 
 
+
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.users.user);
+
+
+
+    const params = useParams();
+
+    const { id } = params;
+
+    useEffect(() => {
+        const users = getDataFromFile(localStorageData.Users) || []
+        const userGet = users.find((item) => item?._id === id || getAndCheckLocalStorage(localStorageKeys.userId))
+        dispatch({ type: FETCH_USER_SUCCESS, payload: userGet });
+    }, [dispatch])
+
+    useEffect(() => {
+        dispatch(fetchUsersAll())
+        dispatch(fetchUserById(id || getAndCheckLocalStorage(localStorageKeys?.userId)));
+    });
+
+
+
+
     const location = {
-        lat: 5.3435, // Latitude de Cocody
-        lng: -4.0125, // Longitude de Cocody
+        lat: user?.lat || "", // Latitude de Cocody
+        lng: user?.lng, // Longitude de Cocody
     };
 
 
@@ -59,12 +90,16 @@ export const ProfileSideBarLeft = (props) => {
             <div class="detail-wrapper">
                 <div class="detail-wrapper-body">
                     <div class="listing-title-bar">
-                        <h3>Fatihoune group <span class="mrg-l-5 category-tag">Immobilier & Construction & Décoration.</span></h3>
+                        {user?.category?.name && <h3>{user?.companyName || ""}<span class="mrg-l-5 category-tag">{user?.category?.name || ""}</span></h3>}
                         <div>
-                            <a href="#listing-location" class="listing-address">
-                                <i class="ti-location-pin mrg-r-5"></i>
-                                2726 Shinn Street, New York
-                            </a>
+                            {
+                                user?.address &&
+                                <a href="#listing-location" class="listing-address">
+                                    <i class="ti-location-pin mrg-r-5"></i>
+                                    {user?.address || ""}
+                                </a>
+                            }
+
 
                             <div class="rating-box">
                                 <div class="detail-list-rating">
@@ -81,22 +116,21 @@ export const ProfileSideBarLeft = (props) => {
                 </div>
             </div>
 
+            {
+
+            }
             <div class="detail-wrapper">
                 <div class="detail-wrapper-header">
                     <h4>Description</h4>
                 </div>
-                <div class="detail-wrapper-body">
-                    <p>Lucas est un investisseur passionné par l'innovation et le développement durable. Fort d'une expérience
-                        de plusieurs années dans le secteur des start-ups et des entreprises technologiques, il a su repérer des
-                        opportunités stratégiques tout en accompagnant de jeunes entreprises vers une croissance rapide. Sa
-                        vision à long terme et son expertise dans l'analyse des risques font de lui un acteur clé pour des
-                        investissements réussis et des partenariats solides.</p>
-                    <p>Sa philosophie est d'agir avec intégrité, en prenant en compte non seulement les rendements financiers,
-                        mais aussi les impacts sociaux et environnementaux des projets dans lesquels il choisit de s'impliquer.
-                        Toujours à l'affût de nouvelles tendances, Lucas est reconnu pour sa capacité à transformer des idées
-                        audacieuses en succès tangibles, soutenant ainsi l'émergence de nouvelles technologies et de modèles
-                        d'affaires innovants.</p>
-                </div>
+                {
+                    user?.description &&
+                    <div class="detail-wrapper-body" dangerouslySetInnerHTML={{ __html: user?.description || "" }} >
+                       
+                    </div>
+
+                }
+
             </div>
 
             <div class="detail-wrapper">
@@ -112,7 +146,7 @@ export const ProfileSideBarLeft = (props) => {
 
             </div>
 
-            <div className=""style={{ height:"450px",width:"400px" }}>
+            <div className="" style={{ height: "450px", width: "400px" }}>
                 <div className="detail-wrapper-header">
                     <h4>Location</h4>
                 </div>
@@ -214,6 +248,6 @@ export const ProfileSideBarLeft = (props) => {
 // Enveloppe du composant avec GoogleApiWrapper
 export default GoogleApiWrapper({
     apiKey: "AIzaSyC3XycRahmXPHzfWZikFEwLiKzkNmTAD9I", // Clé API Google
-  })(ProfileSideBarLeft);
-    
+})(ProfileSideBarLeft);
+
 

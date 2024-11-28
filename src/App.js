@@ -12,10 +12,11 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path={""} element={<LayoutWeb/>}>
+
+        <Route path={""} element={<LayoutWeb />}>
           <Route path="" element={<HomePage />} />
           <Route path={`${routing.search}`} element={<SearchPage />} />
-          <Route path={`${routing.profile_view}`} element={<ProfilePage />} />
+          <Route path={`${routing.profile_view}/:id`} element={<ProfilePage />} />
           <Route path={`${routing.profile_edit}`} element={<ProfileEditPage />} />
         </Route>
 
