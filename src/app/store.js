@@ -3,7 +3,6 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import {thunk} from 'redux-thunk';
 import languageReducer from './reducers/languageReducer';
 import userReducer from './reducers/userReducer';
-import messageReducer from './reducers/messageReducer';
 import codepostalReducer from './reducers/codepostalReducer';
 import adminReducer from './reducers/adminReducer';
 import categoryReducer from './reducers/categoryReducer';

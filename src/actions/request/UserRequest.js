@@ -1,18 +1,16 @@
 import axios from "axios";
 import { FETCH_USERS_FAILURE, FETCH_USERS_REQUEST, FETCH_USERS_SUCCESS, FETCH_USERS_SUCCESS_2, FETCH_USER_FAILURE, FETCH_USER_REQUEST, FETCH_USER_SUCCESS } from "../../app/actions/actions";
-import { ROUTES } from "../../config/routingUrl";
-import { dureeDeVie, getAndCheckLocalStorage, setWithExpiration } from "../../utils/storage/localvalueFuction";
-import { localStorageData, localStorageKeys } from "../../utils/storage/localvalue";
-import { baseurl } from "../../utils/url/baseurl";
+import { routing } from "../../config/routing";
+import { dureeDeVie, getAndCheckLocalStorage, setWithExpiration } from "../../config/localvalueFuction";
+import { localStorageData, localStorageKeys } from "../../config/localvalue";
 import { saveDataToFile } from "../DataLocal";
-import { profileRoleType } from "../../utils/dataApi/dataFormApi";
+import { baseurl } from "../../config/baseurl";
 
 
 
 // Create User
 export const UserCreate = (
     data,
-    navigate,
     toast) => {
     return async (dispatch) => {
         dispatch({ type: FETCH_USER_REQUEST });
@@ -31,9 +29,7 @@ export const UserCreate = (
             .then((response) => {
                 toast.success("Compte créer avec succès", { position: "bottom-right" });
                 dispatch({ type: FETCH_USER_SUCCESS });
-                navigate(`/${ROUTES.LOGIN}`)
-                // window.location.href = `/${ROUTES.LOGIN}`;
-
+                window.location.reload();
             })
             .catch((error) => {
                 //console.log(error);
@@ -73,7 +69,7 @@ export const UserUpdateById = (
                 window.location.reload();
                 }
 
-                // window.location.href = `/${ROUTES.LOGIN}`;
+                // window.location.href = `/${routing.LOGIN}`;
             })
             .catch((error) => {
                 toast.error("Mise à jour impossible", { position: "bottom-right" })
@@ -97,7 +93,7 @@ export const UserUpdateById = (
 
 
 // Connexion User
-export const UserConnexion = (usernameOremail, password, redirect, toast) => {
+export const UserConnexion = (usernameOremail, password, toast) => {
     return async (dispatch) => {
         dispatch({ type: FETCH_USER_REQUEST });
         await axios
@@ -116,21 +112,17 @@ export const UserConnexion = (usernameOremail, password, redirect, toast) => {
                 dispatch({ type: FETCH_USER_SUCCESS });
                 //console.log(response.data.data);
                 setWithExpiration(localStorageKeys.userId, response.data?.data?._id, dureeDeVie);
-                setWithExpiration(localStorageKeys.userCoverPicture, response.data?.data?.profilePicture, dureeDeVie);
-                setWithExpiration(localStorageKeys.userRole, response.data?.data?.role, dureeDeVie);
                 setWithExpiration(localStorageKeys.userName, response.data?.data?.firstname + " " + response.data?.data?.lastname, dureeDeVie);
-                setWithExpiration(localStorageKeys.profileRole, response.data?.role, dureeDeVie);
                 dispatch(fetchUsersAll());
-                toast.success("Vous étes maintenant connecté", { position: "bottom-right" });
+                toast.success(response?.data?.message || "Vous ête maintenant connecté", { position: "bottom-right" });
 
                 setTimeout(() => {
-                    redirect(`/${ROUTES.DASHBOARD}`);
-                    // window.location.href = `/${ROUTES.DASHBOARD}`;
+                    window.location.reload()
                 }, 1000);
             })
             .catch((error) => {
                 dispatch({ type: FETCH_USER_FAILURE, payload: error.message });
-                toast.error(`${error.response.data.message}`, { position: "bottom-right" });
+                toast.error(error?.response?.data?.message || "Imposible de se connecter" , { position: "bottom-right" });
             });
     };
 }
@@ -261,7 +253,7 @@ export const UserResetPasswordForget = (
                 dispatch({ type: FETCH_USER_SUCCESS });
                 setStep(1);
                 showModal(true);
-                window.location.href = `/${ROUTES.LOGIN}`;
+                window.location.href = `/${routing.LOGIN}`;
             })
             .catch((error) => {
                 toast.error(error?.response?.data?.message || "Mot de passe non mis à jour", { position: "bottom-right" })

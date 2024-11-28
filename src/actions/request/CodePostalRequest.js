@@ -1,10 +1,10 @@
 import axios from "axios";
 import { FETCH_CODE_POSTALS_FAILURE, FETCH_CODE_POSTALS_REQUEST, FETCH_CODE_POSTALS_SUCCESS, FETCH_CODE_POSTALS_SUCCESS_2, FETCH_CODE_POSTAL_FAILURE, FETCH_CODE_POSTAL_REQUEST, FETCH_CODE_POSTAL_SUCCESS } from "../../app/actions/actions";
-import { ROUTES } from "../../config/routingUrl";
-import { dureeDeVie, setWithExpiration } from "../../utils/storage/localvalueFuction";
-import { localStorageData, localStorageKeys } from "../../utils/storage/localvalue";
-import { baseurl } from "../../utils/url/baseurl";
+import { routing } from "../../config/routing";
+import { dureeDeVie, setWithExpiration } from "../../config/localvalueFuction";
+import { localStorageData, localStorageKeys } from "../../config/localvalue";
 import { saveDataToFile } from "../DataLocal";
+import { baseurl } from "../../config/baseurl";
 
 
 

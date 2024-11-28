@@ -1,12 +1,18 @@
 import React from 'react'
 import { routing } from '../config/routing'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { profilePictureDefault } from '../config/dataApi';
 import {MdOutlineSearch} from "react-icons/md";
+import { getAndCheckLocalStorage } from '../config/localvalueFuction';
+import { localStorageKeys } from '../config/localvalue';
 
 
 
 const NavbarWeb = () => {
+
+
+    const  navigate  =  useNavigate();
+
     const location = useLocation();
 
 
@@ -35,9 +41,19 @@ const NavbarWeb = () => {
                     </ul>
                     <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
 						<li class="no-pd dropdown">
-							<a  href="javascript:void(0)" data-toggle="modal" data-target="#signin" class="addlist"><img src={profilePictureDefault}
+                        {
+                            getAndCheckLocalStorage(localStorageKeys.userId)?
+                            <a  href="#" onClick={()=>{navigate(`/${routing.profile_edit}`)}} class="addlist"><img src={profilePictureDefault}
 									class="img-responsive img-circle avater-img" alt="" /><strong style={{ opacity:"0" }}>{"Profile"}</strong></a>
-                                    </li>
+                                    
+                                    :
+                                    <a  href="javascript:void(0)" data-toggle="modal" data-target="#signin" class="addlist"><img src={profilePictureDefault}
+									class="img-responsive img-circle avater-img" alt="" /><strong style={{ opacity:"0" }}>{"Profile"}</strong></a>
+                                   
+
+                        }
+                        </li>
+							
 
                     </ul>
                 </div>

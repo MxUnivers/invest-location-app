@@ -1,11 +1,10 @@
 import axios from "axios";
 import { FETCH_ADMINS_FAILURE, FETCH_ADMINS_REQUEST, FETCH_ADMINS_SUCCESS, FETCH_ADMINS_SUCCESS_2, FETCH_ADMIN_FAILURE, FETCH_ADMIN_REQUEST, FETCH_ADMIN_SUCCESS } from "../../app/actions/actions";
-import { ROUTES } from "../../config/routingUrl";
-import { dureeDeVie, setWithExpiration } from "../../utils/storage/localvalueFuction";
-import { localStorageData, localStorageKeys } from "../../utils/storage/localvalue";
-import { baseurl } from "../../utils/url/baseurl";
+import { routing } from "../../config/routing";
+import { dureeDeVie, setWithExpiration } from "../../config/localvalueFuction";
+import { localStorageData, localStorageKeys } from "../../config/localvalue";
 import { saveDataToFile } from "../DataLocal";
-import { profileRoleType } from "../../utils/dataApi/dataFormApi";
+import { baseurl } from "../../config/baseurl";
 
 
 
@@ -31,8 +30,8 @@ export const AdminCreate = (
             .then((response) => {
                 toast.success("Compte créer avec succès", { position: "bottom-right" });
                 dispatch({ type: FETCH_ADMIN_SUCCESS });
-                navigate(`/${ROUTES.LOGIN}`)
-                // window.location.href = `/${ROUTES.LOGIN}`;
+                navigate(`/${routing.LOGIN}`)
+                // window.location.href = `/${routing.LOGIN}`;
 
             })
             .catch((error) => {
@@ -68,7 +67,7 @@ export const AdminUpdateById = (
             .then((response) => {
                 toast.success("Compte utilisateur mis à jour avec succès", { position: "bottom-right" });
                 dispatch({ type: FETCH_ADMIN_SUCCESS, payload: response.data.data });
-                // window.location.href = `/${ROUTES.LOGIN}`;
+                // window.location.href = `/${routing.LOGIN}`;
             })
             .catch((error) => {
                 toast.error("Mise à jour impossible", { position: "bottom-right" })
@@ -119,8 +118,8 @@ export const AdminConnexion = (adminnameOremail, password, redirect, toast) => {
                 toast.success("Vous étes maintenant connecté", { position: "bottom-right" });
 
                 setTimeout(() => {
-                    redirect(`/${ROUTES.DASHBOARD}`);
-                    // window.location.href = `/${ROUTES.DASHBOARD}`;
+                    redirect(`/${routing.DASHBOARD}`);
+                    // window.location.href = `/${routing.DASHBOARD}`;
                 }, 1000);
             })
             .catch((error) => {
@@ -256,7 +255,7 @@ export const AdminResetPasswordForget = (
                 dispatch({ type: FETCH_ADMIN_SUCCESS });
                 setStep(1);
                 showModal(true);
-                window.location.href = `/${ROUTES.LOGIN}`;
+                window.location.href = `/${routing.LOGIN}`;
             })
             .catch((error) => {
                 toast.error("Mot de pass", { position: "bottom-right" })

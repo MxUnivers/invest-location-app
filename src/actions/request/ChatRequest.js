@@ -4,11 +4,11 @@
 
 import axios from "axios";
 import { FETCH_CONVERSATIONS_FAILURE, FETCH_CONVERSATIONS_SEND, FETCH_CONVERSATIONS_SUCCESS, FETCH_PARTICIPANTS_SUCCESS, FETCH_PARTICIPANTS_SUCCESS_2, REQUEST_FAILURE_CONVERSATION, REQUEST_SUCCESS_CONVERSATION, SEND_REQUEST_CONVERSATION, SEND_REQUEST_SHOP } from "../../app/actions/actions";
-import ROUTES from "../../config/routingUrl";
-import { baseurl } from "../../utils/url/baseurl";
-import { getAndCheckLocalStorage } from "../../utils/storage/localvalueFuction";
-import { localStorageData, localStorageKeys } from "../../utils/storage/localvalue";
+import { routing } from "../../config/routing";
+import { dureeDeVie, setWithExpiration } from "../../config/localvalueFuction";
+import { localStorageData, localStorageKeys } from "../../config/localvalue";
 import { saveDataToFile } from "../DataLocal";
+import { baseurl } from "../../config/baseurl";
 
 
 

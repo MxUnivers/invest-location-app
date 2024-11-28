@@ -1,9 +1,9 @@
 import axios from "axios";
 import { FETCH_AGENDAS_FAILURE, FETCH_AGENDAS_REQUEST, FETCH_AGENDAS_SUCCESS, FETCH_AGENDAS_SUCCESS_2, FETCH_AGENDA_FAILURE, FETCH_AGENDA_REQUEST, FETCH_AGENDA_SUCCESS, FETCH_AGENDA_FAILURE, FETCH_AGENDA_REQUEST, FETCH_AGENDA_SUCCESS } from "../../app/actions/actions";
-import { ROUTES } from "../../config/routingUrl";
+import { routing } from "../../config/routingUrl";
 import { dureeDeVie, setWithExpiration } from "../../utils/storage/localvalueFuction";
 import { localStorageData, localStorageKeys } from "../../utils/storage/localvalue";
-import { baseurl } from "../../utils/url/baseurl";
+import { baseurl } from "../../config/baseurl";
 import { saveDataToFile } from "../DataLocal";
 
 
@@ -31,7 +31,7 @@ export const AgendaCreate = (
             .then((response) => {
                 toast.success("Agenda ajouté avec succès");
                 dispatch({ type: FETCH_AGENDA_SUCCESS });
-                // window.location.href = `/${ROUTES.LOGIN}`;
+                // window.location.href = `/${routing.LOGIN}`;
             })
             .catch((error) => {
                 toast.error("Création de cet compte impossible")

@@ -1,11 +1,10 @@
 import axios from "axios";
 import { FETCH_CATEGORYS_FAILURE, FETCH_CATEGORYS_REQUEST, FETCH_CATEGORYS_SUCCESS, FETCH_CATEGORYS_SUCCESS_2, FETCH_CATEGORY_FAILURE, FETCH_CATEGORY_REQUEST, FETCH_CATEGORY_SUCCESS } from "../../app/actions/actions";
-import { ROUTES } from "../../config/routingUrl";
-import { dureeDeVie, setWithExpiration } from "../../utils/storage/localvalueFuction";
-import { localStorageData, localStorageKeys } from "../../utils/storage/localvalue";
+import { routing } from "../../config/routing";
+import { dureeDeVie, setWithExpiration } from "../../config/localvalueFuction";
+import { localStorageData, localStorageKeys } from "../../config/localvalue";
 import { saveDataToFile } from "../DataLocal";
 import { baseurl } from "../../config/baseurl";
-
 
 
 
