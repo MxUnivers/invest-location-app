@@ -4,7 +4,7 @@ import { baseurl } from "../../config/baseurl";
 
 
 
-export const handleImageUploadCloud = async (files , toast) => {
+export const handleImageUploadCloud = async (files, toast) => {
     const uploadPromises = Array.from(files).map((file) => {
         const formData = new FormData();
         formData.append('file', file);

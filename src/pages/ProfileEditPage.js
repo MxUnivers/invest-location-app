@@ -12,8 +12,9 @@ import { FETCH_USER_FAILURE, FETCH_USER_REQUEST, FETCH_USER_SUCCESS } from '../a
 import { localStorageKeys } from '../config/localvalue';
 import { getAndCheckLocalStorage } from '../config/localvalueFuction';
 import { UserUpdateById } from '../actions/request/UserRequest';
-import { handleImageUploadCloud } from '../actions/upload/UploadFileCloud';
+import { handleImageUploadCloud, handleImageUploadCloudOnly } from '../actions/upload/UploadFileCloud';
 import { MdClose } from 'react-icons/md';
+import { profilePictureDefault } from '../config/dataApi';
 
 
 const ProfileEditPage = () => {
@@ -118,12 +119,32 @@ const ProfileEditPage = () => {
     // Gestion de l'ajout des images
     const handleImageUpload = async (e) => {
         const files = e.target.files;
-        const newImages =  await handleImageUploadCloud(files,toast);
+        const newImages = await handleImageUploadCloud(files, toast);
         setFormData({
             ...formData,
             images: [...formData.images, ...newImages], // Ajoute les nouvelles images au tableau existant
         });
     };
+
+
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const newImages = await handleImageUploadCloudOnly(file, toast);
+            setFormData({
+                ...formData,
+                profilePicture: newImages, // Ajoute les nouvelles images au tableau existant
+            });
+
+        }
+    };
+
+    // Déclenchement de l'input file quand l'image est cliquée
+    const handleImageClick = () => {
+        document.getElementById('fileInput').click(); // Déclenche le clic de l'input
+    };
+
+
 
     // Mise à jour de la disponibilité (jours et horaires)
     const handleDayClick = (day) => {
@@ -253,15 +274,16 @@ const ProfileEditPage = () => {
             <section className="title-transparent page-title" style={{ background: "url(assets/img/title-bg.jpg)" }}>
                 <div className="container">
                     <div className="title-content">
-                        <h1>Mis ajour de votre profile de disponibilite</h1>
-                        <div className="breadcrumbs">
-                            <a href="#">Accueil</a>
-                            <span className="gt3_breadcrumb_divider"></span>
-                            <span className="current">Ajouter une Annonce</span>
+                        <h1 style={{ fontSize: "35px" }}>Mis ajour de votre profile </h1>
+                        <div className="mt-5" style={{ marginTop:"50px" }}>
+                            <div>
+                                <button type="button" className="btn btn-primary mx-5 text-white">Voire mon profile</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
+            
             <div className="clearfix"></div>
 
             <section onClick={handleCleanSugestions}>
@@ -360,7 +382,7 @@ const ProfileEditPage = () => {
                                     </div>
                                     <div className="col-sm-12">
                                         <label>Galerie Actuelle</label>
-                                        <div className="gallery-preview"  style={{ display: "flex", flexWrap: "wrap" }}>
+                                        <div className="gallery-preview" style={{ display: "flex", flexWrap: "wrap" }}>
                                             {/* Placez ici les images déjà existantes */}
                                             {formData.images.map((image, index) => {
                                                 return (
@@ -376,12 +398,12 @@ const ProfileEditPage = () => {
                                                         </span>
                                                         <div>
 
-                                                    <img
-                                                        src={image || "https://via.placeholder.com/100"}
-                                                        alt="Prévisualisation"
-                                                        className="img-thumbnail m-1" style={{ height: "100px", width: "100px" }}
-                                                    />
-                                                    </div>
+                                                            <img
+                                                                src={image || "https://via.placeholder.com/100"}
+                                                                alt="Prévisualisation"
+                                                                className="img-thumbnail m-1" style={{ height: "100px", width: "100px" }}
+                                                            />
+                                                        </div>
                                                     </li>
                                                 )
                                             })}
@@ -396,6 +418,7 @@ const ProfileEditPage = () => {
                         {/* Formulaire pour mettre à jour les informations personnelles */}
                         <div className="add-listing-box personal-info mrg-bot-25 padd-bot-30 padd-top-25">
                             <div className="listing-box-header">
+
                                 <i className="ti-user theme-cl"></i>
                                 <h3>Informations Personnelles</h3>
                                 <p>Mettez à jour vos informations personnelles et coordonnées.</p>
@@ -403,6 +426,28 @@ const ProfileEditPage = () => {
 
                             <form onSubmit={handleSubmit}>
                                 <div className="row mrg-r-10 mrg-l-10">
+
+
+
+                                    <div className="col-sm-12" style={{ width: "100%", justifyContent: "center", textAlign: "center" }}>
+                                        {/* Image cliquable */}
+                                        <img
+                                            src={formData?.profilePicture || profilePictureDefault}
+                                            alt="Profile"
+                                            style={{ height: "100px", width: "100px", borderRadius: "50%", cursor: "pointer" }}
+                                            onClick={handleImageClick} // Déclenche le clic de l'input file
+                                        />
+                                        {/* Input de fichier masqué */}
+                                        <input
+                                            type="file"
+                                            id="fileInput"
+                                            style={{ display: "none" }} // Masque l'input de fichier
+                                            accept="image/*"
+                                            onChange={handleImageChange} // Fonction de gestion du changement d'image
+                                        />
+                                    </div>
+
+
                                     <div className="col-sm-6">
                                         <label>Nom  <span className="text-danger">*</span></label>
                                         <input
