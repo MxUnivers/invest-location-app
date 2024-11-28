@@ -12,7 +12,6 @@ export function ProfileMapList({ google }) {
 
   useEffect(() => {
     dispatch(fetchUsersAll());
-
   }, [dispatch])
 
 

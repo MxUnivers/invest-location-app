@@ -1,8 +1,13 @@
 // src/components/Home.js
 import React, { useEffect, useState } from "react";
-import { categoriesSecteurs, profilePictureDefault, villesCoteDIvoire } from "../config/dataApi";
+import { profilePictureDefault } from "../config/dataApi";
 import { GoogleApiWrapper, Map, Marker, InfoWindow } from "google-maps-react";
 import { routing } from "../config/routing";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCategorysAll } from "../actions/request/CategoryRequest";
+import { fetchRegionysAll } from "../actions/request/RegionRequest";
+import { fetchUsersAll } from "../actions/request/UserRequest";
+import { FETCH_USERS_SUCCESS } from "../app/actions/actions";
 
 // Remplacez votre propre clé API ici
 const mapStyles = {
@@ -13,101 +18,41 @@ const mapStyles = {
 function SearchPage(props) {
 
 
+  const dispatch = useDispatch();
+  const categoriesSecteurs = useSelector((state) => state.categorys.categorys)
+  const villesCoteDIvoire = useSelector((state) => state.regions.regions)
+  const listings2 = useSelector((state) => state.users.users2);
+  const listings = useSelector((state) => state.users.users);
 
-  const listings = [
-    {
-      id: 1,
-      name: "Education",
-      category: "Éducation",
-      locality: "Abidjan",
-      image: "assets/img/category/education.jpg",
-      location: "Cocody, Abidjan",
-      phone: "225-20-123-456",
-      website: "www.educationci.com",
-      rating: 4.5,
-      latitude: 5.3572,
-      longitude: -3.9396
-    },
-    {
-      id: 2,
-      name: "Documentary",
-      category: "Média",
-      locality: "Abidjan",
-      image: "assets/img/category/documentry.jpg",
-      location: "Plateau, Abidjan",
-      phone: "225-20-234-567",
-      website: "www.documentaryci.com",
-      rating: 4.0,
-      latitude: 5.3165,
-      longitude: -4.0271
-    },
-    {
-      id: 3,
-      name: "Technology",
-      category: "Technologie",
-      locality: "Abidjan",
-      image: profilePictureDefault,
-      location: "Marcory, Abidjan",
-      phone: "225-21-456-789",
-      website: "www.techci.com",
-      rating: 5.0,
-      latitude: 5.306,
-      longitude: -3.975
-    },
-    {
-      id: 4,
-      name: "Healthcare",
-      category: "Santé",
-      locality: "Abidjan",
-      image: profilePictureDefault,
-      location: "Treichville, Abidjan",
-      phone: "225-21-345-678",
-      website: "www.healthcareci.com",
-      rating: 4.8,
-      latitude: 5.3097,
-      longitude: -4.0131
-    },
-    {
-      id: 5,
-      name: "Agriculture",
-      category: "Agriculture",
-      locality: "Abidjan",
-      image: profilePictureDefault,
-      location: "Yopougon, Abidjan",
-      phone: "225-23-789-012",
-      website: "www.agricultureci.com",
-      rating: 4.6,
-      latitude: 5.328,
-      longitude: -4.081
-    },
-  ];
+  useEffect(() => {
+    dispatch(fetchUsersAll());
+    dispatch(fetchCategorysAll());
+    dispatch(fetchRegionysAll());
+  }, [dispatch])
 
 
 
-  const [filteredProfiles, setFilteredProfiles] = useState([]);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLocality, setSelectedLocality] = useState("");
 
-  useEffect(() => {
-    // Initialisation des profils filtrés
-    setFilteredProfiles(listings);
-  }, []);
+
 
   const handleSearch = () => {
-    const filtered = listings.filter((listing) => {
+    const filtered = listings2.filter((listing) => {
       const matchesSearchTerm =
         searchTerm === "" ||
         listing.name.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory =
-        selectedCategory === "" || listing.category === selectedCategory;
+        selectedCategory === "" || listing.category?._id === selectedCategory;
       const matchesLocality =
-        selectedLocality === "" || listing.locality === selectedLocality;
+        selectedLocality === "" || listing.locality?._id === selectedLocality;
 
       return matchesSearchTerm && matchesCategory && matchesLocality;
     });
 
-    setFilteredProfiles(filtered);
+    dispatch({ type: FETCH_USERS_SUCCESS, payload: filtered });
   };
 
 
@@ -155,52 +100,40 @@ function SearchPage(props) {
                       className="form-control left-radius right-br"
                       placeholder="Mot clé"
                       value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={(e) => setSearchTerm(e.target.value)}
                     />
                   </div>
-                  <div className="col-md-3 col-sm-3 no-padd">
+                  <div className="col-sm-3">
+                    <label>Localité  <span className="text-danger">*</span></label>
                     <select
-                      className="selectpicker form-control"
-                      data-live-search="true"
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                    >
-                      <option data-tokens="ketchup mustard">
-                        Choisir localité
-                      </option>
-                      {
-                        villesCoteDIvoire.map((item) => {
-                          return (
-                            <option value={item} data-tokens="ketchup mustard">
-                              {item}
-                            </option>
-                          )
-                        })
-                      }
-
-                    </select>
-                  </div>
-                  <div className="col-md-3 col-sm-3 no-padd">
-                    <select
-                      className="selectpicker form-control"
-                      data-live-search="true"
+                      name="region"
+                      className="form-control"
                       onChange={(e) => setSelectedLocality(e.target.value)}
                     >
-                      <option data-tokens="ketchup mustard">
-                        Choisir categorie
-                      </option>
-                      {
-                        categoriesSecteurs.map((item) => {
-                          return (
-                            <option value={item.value} data-tokens="ketchup mustard">
-                              {item.name}
-                            </option>
-                          )
-                        })
-                      }
-
+                      <option value="">-- Localité --</option>
+                      {villesCoteDIvoire.map((postal) => (
+                        <option key={postal._id} value={postal._id}>
+                          {postal?.name || ""}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
+                  <div className="col-sm-3">
+                    <label>Catégorie  <span className="text-danger">*</span></label>
+                    <select
+                      name="category"
+                      className="form-control"
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                    >
+                      <option value="">-- Catéogorie --</option>
+                      {categoriesSecteurs.map((postal) => (
+                        <option key={postal._id} value={postal._id}>
+                          {postal?.name || ""}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
                 <div class="row mrg-0">
@@ -215,23 +148,23 @@ function SearchPage(props) {
 
             <div class="row mrg-bot-20">
               <div class="col-md-12">
-                <h5>{filteredProfiles.length} resultat trouvés</h5>
+                <h5>{listings.length} resultat trouvés</h5>
               </div>
             </div>
 
             <div className="row">
-            {filteredProfiles.map((listing) => (
-                <div className="col-md-6 col-sm-12"  onClick={() => {
+              {listings.map((listing) => (
+                <div className="col-md-6 col-sm-12" onClick={() => {
                   window.location.href = `/${routing.profile_view}`;
                 }}>
                   <div className="listing-shot grid-style">
                     <a href="#">
                       <div className="listing-shot-img">
-                        <img src={listing.image || profilePictureDefault} className="img-responsive cover" alt={listing.name} />
+                        <img src={listing.profilePicture || profilePictureDefault} className="img-responsive cover" alt={listing.name} />
                       </div>
                       <div className="listing-shot-caption">
                         <h4>{listing.name}</h4>
-                        <p className="listing-location">{listing.location}</p>
+                        <p className="listing-location">{listing?.address}</p>
                         <span className="like-listing style-2"><i className="fa fa-heart-o" aria-hidden="true"></i></span>
                       </div>
                     </a>
@@ -239,7 +172,7 @@ function SearchPage(props) {
                       <div className="row extra">
                         <div className="col-md-12">
                           <div className="listing-detail-info">
-                            <span><i className="fa fa-phone" aria-hidden="true"></i> {listing.phone}</span>
+                            <span><i className="fa fa-phone" aria-hidden="true"></i> {listing?.codePostal?.indicatif || ""}  {listing?.phone || ""}</span>
                             <span><i className="fa fa-globe" aria-hidden="true"></i> {listing.website}</span>
                           </div>
                         </div>
@@ -273,20 +206,20 @@ function SearchPage(props) {
               style={mapStyles}
               initialCenter={{ lat: 5.345317, lng: -4.024429 }}
             >
-              {filteredProfiles.map((listing) => (
+              {listings.map((listing) => (
                 <Marker
-                  key={listing.id}
+                  key={listing._id}
                   position={{
-                    lat: listing.latitude,
-                    lng: listing.longitude,
+                    lat: listing?.lat,
+                    lng: listing?.lng,
                   }}
-                  title={listing.name}
+                  title={listing?.firstname}
                   onClick={onMarkerClick}
-                  
-                  name={listing.name}
-                  image={listing.image}
+
+                  name={listing?.firstname && listing?.lastname}
+                  image={listing?.profilePicture || profilePictureDefault}
                   icon={{
-                    url: profilePictureDefault,
+                    url: listing?.profilePicture || profilePictureDefault,
                     scaledSize: new props.google.maps.Size(40, 40), // Taille personnalisée
                   }}
 
@@ -301,8 +234,8 @@ function SearchPage(props) {
               >
                 <div style={{ width: "200px", height: "200px" }}>
                   <img
-                    src={selectedPlace?.image ||profilePictureDefault}
-                    alt={selectedPlace ? selectedPlace.name : ""}
+                    src={selectedPlace?.profilePicture || profilePictureDefault}
+                    alt={selectedPlace ? selectedPlace?.firstname : ""}
                     style={{
                       width: "100%",
                       height: "100%",
@@ -310,9 +243,9 @@ function SearchPage(props) {
                       borderRadius: "50%"
                     }}
                   />
-                  <h4>{selectedPlace ? selectedPlace.name : ""}</h4>
-                  <p>{selectedPlace ? selectedPlace.location : ""}</p>
-                  <p>{selectedPlace ? selectedPlace.phone : ""}</p>
+                  <h4>{selectedPlace ? selectedPlace?.companyName : ""}</h4>
+                  <p>{selectedPlace ? selectedPlace?.address : ""}</p>
+                  <p> {selectedPlace ? selectedPlace?.codePostal?.indicatif : ""} {selectedPlace ? selectedPlace.phone : ""}</p>
                   <p>
                     <a href={selectedPlace ? selectedPlace?.website : "#"} target="_blank" rel="noopener noreferrer">
                       Visit Website
