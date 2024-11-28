@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { MdStarBorder, MdStarRate } from "react-icons/md";
+import { MdLocationCity, MdStarBorder, MdStarRate } from "react-icons/md";
 import { GoogleApiWrapper, Map, Marker } from "google-maps-react";
 import { profilePictureDefault } from '../../config/dataApi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,7 +46,7 @@ export const ProfileSideBarLeft = (props) => {
 
     const location = {
         lat: user?.lat || "", // Latitude de Cocody
-        lng: user?.lng, // Longitude de Cocody
+        lng: user?.lng || "" // Longitude de Cocody
     };
 
 
@@ -124,10 +124,13 @@ export const ProfileSideBarLeft = (props) => {
                     <h4>Description</h4>
                 </div>
                 {
-                    user?.description &&
-                    <div class="detail-wrapper-body" dangerouslySetInnerHTML={{ __html: user?.description || "" }} >
-                       
-                    </div>
+                    user?.description ?
+                        <div class="detail-wrapper-body" dangerouslySetInnerHTML={{ __html: user?.description || "" }} >
+
+                        </div>
+
+                        :
+                        <div class="detail-wrapper-body" style={{ height: "100px", width: "100%", justifyContent: "center", }}>...</div>
 
                 }
 
@@ -146,21 +149,26 @@ export const ProfileSideBarLeft = (props) => {
 
             </div>
 
-            <div className="" style={{ height: "450px", width: "400px" }}>
-                <div className="detail-wrapper-header">
-                    <h4>Location</h4>
+            {
+                location?.lat && location.lng &&
+                <div className="" style={{ height: "450px", width: "500px" }}>
+                    <div className="detail-wrapper-header">
+                        <h4 style={{ fontWeight: "700", fontSize: "20px" }}> Locatisation</h4>
+                        <h3>{user?.address || ""}</h3>
+                    </div>
+                    <div className="detail-wrapper-body">
+                        <Map 
+                            google={props.google}
+                            zoom={14}
+                            style={mapStyles}
+                            initialCenter={location}
+                        >
+                            <Marker position={location} />
+                        </Map>
+                    </div>
                 </div>
-                <div className="detail-wrapper-body">
-                    <Map
-                        google={props.google}
-                        zoom={14}
-                        style={mapStyles}
-                        initialCenter={location}
-                    >
-                        <Marker position={location} />
-                    </Map>
-                </div>
-            </div>
+            }
+
 
             <div class="detail-wrapper">
                 <div class="detail-wrapper-header">
@@ -176,7 +184,7 @@ export const ProfileSideBarLeft = (props) => {
                                         <div class="reviews-box">
                                             <div class="review-body">
                                                 <div class="review-avatar">
-                                                    <img alt={review.author} src={review.avatar} class="avatar avatar-140 photo" />
+                                                    <img alt={review.user?.profilePicture || profilePictureDefault } src={review.user?.firtname || "utilisateur"} class="avatar avatar-140 photo" />
                                                 </div>
                                                 <div class="review-content">
                                                     <div class="review-info">
