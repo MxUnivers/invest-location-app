@@ -3,7 +3,7 @@ import { FETCH_REGIONS_FAILURE, FETCH_REGIONS_REQUEST, FETCH_REGIONS_SUCCESS, FE
 import { routing } from "../../config/routing";
 import { dureeDeVie, setWithExpiration } from "../../config/localvalueFuction";
 import { localStorageData, localStorageKeys } from "../../config/localvalue";
-import { saveDataToFile } from "../DataLocal";
+import { getDataFromFile, saveDataToFile } from "../DataLocal";
 import { baseurl } from "../../config/baseurl";
 
 
@@ -11,6 +11,12 @@ import { baseurl } from "../../config/baseurl";
 // All insurance of plateforme
 export function fetchRegionysAll() {
     return async (dispatch) => {
+
+        const regions = getDataFromFile(localStorageData.Regions) || []
+        dispatch({ type: FETCH_REGIONS_SUCCESS, payload: regions });
+        dispatch({ type: FETCH_REGIONS_SUCCESS_2, payload: regions });
+
+
         dispatch({ type: FETCH_REGIONS_REQUEST });
         await axios.get(`${baseurl.url}/api/v1/regions/get_regions`, {
             headers: {
@@ -21,7 +27,7 @@ export function fetchRegionysAll() {
             //console.log(response.data.data);
             dispatch({ type: FETCH_REGIONS_SUCCESS, payload: response.data.data });
             dispatch({ type: FETCH_REGIONS_SUCCESS_2, payload: response.data.data });
-            saveDataToFile(response.data.data, localStorageData.Regionys);
+            saveDataToFile(response.data.data, localStorageData.Regions);
         })
             .catch((error) => {
                 //console.log(error);

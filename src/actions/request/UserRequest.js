@@ -3,7 +3,7 @@ import { FETCH_USERS_FAILURE, FETCH_USERS_REQUEST, FETCH_USERS_SUCCESS, FETCH_US
 import { routing } from "../../config/routing";
 import { dureeDeVie, getAndCheckLocalStorage, setWithExpiration } from "../../config/localvalueFuction";
 import { localStorageData, localStorageKeys } from "../../config/localvalue";
-import { saveDataToFile } from "../DataLocal";
+import { getDataFromFile, saveDataToFile } from "../DataLocal";
 import { baseurl } from "../../config/baseurl";
 
 
@@ -64,9 +64,9 @@ export const UserUpdateById = (
             .then((response) => {
                 toast.success("Compte utilisateur mis ajour avec succès", { position: "bottom-right" });
                 dispatch({ type: FETCH_USER_SUCCESS, payload: response.data.data });
-                if(getAndCheckLocalStorage(localStorageKeys.userId)==idUser){
-                setWithExpiration(localStorageKeys.userCoverPicture, response.data.data.profilePicture, dureeDeVie);
-                window.location.reload();
+                if (getAndCheckLocalStorage(localStorageKeys.userId) == idUser) {
+                    setWithExpiration(localStorageKeys.userCoverPicture, response.data.data.profilePicture, dureeDeVie);
+                    window.location.reload();
                 }
 
                 // window.location.href = `/${routing.LOGIN}`;
@@ -122,7 +122,7 @@ export const UserConnexion = (usernameOremail, password, toast) => {
             })
             .catch((error) => {
                 dispatch({ type: FETCH_USER_FAILURE, payload: error.message });
-                toast.error(error?.response?.data?.message || "Imposible de se connecter" , { position: "bottom-right" });
+                toast.error(error?.response?.data?.message || "Imposible de se connecter", { position: "bottom-right" });
             });
     };
 }
@@ -136,6 +136,9 @@ export const UserConnexion = (usernameOremail, password, toast) => {
 // All users of plateforme
 export function fetchUsersAll() {
     return async (dispatch) => {
+        const users = getDataFromFile(localStorageData.Users) || []
+        dispatch({ type: FETCH_USERS_SUCCESS, payload: users });
+        dispatch({ type: FETCH_USERS_SUCCESS_2, payload: users });
         dispatch({ type: FETCH_USERS_REQUEST });
         await axios.get(`${baseurl.url}/api/v1/users/get_users`, {
             headers: {
@@ -288,12 +291,12 @@ export const UserSendCodeverfiy = (
                 }
             )
             .then((response) => {
-                toast.success( response?.data?.message || "Un code vous été envoyer sur votre email .", { position: "bottom-right" });
+                toast.success(response?.data?.message || "Un code vous été envoyer sur votre email .", { position: "bottom-right" });
                 setSept(2)
                 dispatch({ type: FETCH_USER_SUCCESS });
             })
             .catch((error) => {
-                toast.error( error?.response?.data?.message ||"Le code n'a pas été entrez email valide . ", { position: "bottom-right" })
+                toast.error(error?.response?.data?.message || "Le code n'a pas été entrez email valide . ", { position: "bottom-right" })
                 dispatch({ type: FETCH_USER_FAILURE, payload: error.message });
             });
     };

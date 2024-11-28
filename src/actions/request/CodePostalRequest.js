@@ -3,7 +3,7 @@ import { FETCH_CODE_POSTALS_FAILURE, FETCH_CODE_POSTALS_REQUEST, FETCH_CODE_POST
 import { routing } from "../../config/routing";
 import { dureeDeVie, setWithExpiration } from "../../config/localvalueFuction";
 import { localStorageData, localStorageKeys } from "../../config/localvalue";
-import { saveDataToFile } from "../DataLocal";
+import { getDataFromFile, saveDataToFile } from "../DataLocal";
 import { baseurl } from "../../config/baseurl";
 
 
@@ -11,7 +11,11 @@ import { baseurl } from "../../config/baseurl";
 
 // All insurance of plateforme
 export function fetchCodePostalsAll() {
+    
     return async (dispatch) => {
+        const codeppstals = getDataFromFile(localStorageData.CodePostals) || []
+        dispatch({ type: FETCH_CODE_POSTALS_SUCCESS, payload: codeppstals });
+        dispatch({ type: FETCH_CODE_POSTALS_SUCCESS_2, payload: codeppstals });
         dispatch({ type: FETCH_CODE_POSTALS_REQUEST });
         await axios.get(`${baseurl.url}/api/v1/codepostals/get_codepostals`, {
             headers: {
@@ -22,7 +26,7 @@ export function fetchCodePostalsAll() {
             //console.log(response.data.data);
             dispatch({ type: FETCH_CODE_POSTALS_SUCCESS, payload: response.data.data });
             dispatch({ type: FETCH_CODE_POSTALS_SUCCESS_2, payload: response.data.data });
-            // saveDataToFile(response.data.data, localStorageData.CodePostals);
+            saveDataToFile(response.data.data, localStorageData.CodePostals);
         }).catch((error) => {
                 //console.log(error);
                 dispatch({ type: FETCH_CODE_POSTALS_FAILURE, payload: error.message });

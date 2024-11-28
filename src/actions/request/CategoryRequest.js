@@ -3,7 +3,7 @@ import { FETCH_CATEGORYS_FAILURE, FETCH_CATEGORYS_REQUEST, FETCH_CATEGORYS_SUCCE
 import { routing } from "../../config/routing";
 import { dureeDeVie, setWithExpiration } from "../../config/localvalueFuction";
 import { localStorageData, localStorageKeys } from "../../config/localvalue";
-import { saveDataToFile } from "../DataLocal";
+import { getDataFromFile, saveDataToFile } from "../DataLocal";
 import { baseurl } from "../../config/baseurl";
 
 
@@ -11,6 +11,9 @@ import { baseurl } from "../../config/baseurl";
 // All insurance of plateforme
 export function fetchCategorysAll() {
     return async (dispatch) => {
+        const categorys = getDataFromFile (localStorageData.Categorys) || []
+        dispatch({ type: FETCH_CATEGORYS_SUCCESS, payload: categorys });
+        dispatch({ type: FETCH_CATEGORYS_SUCCESS_2, payload: categorys });
         dispatch({ type: FETCH_CATEGORYS_REQUEST });
         await axios.get(`${baseurl.url}/api/v1/categorys/get_categorys`, {
             headers: {
