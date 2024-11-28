@@ -1,7 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Importation des styles par défaut de Quill
+
+import { fetchCodePostalsAll } from '../actions/request/CodePostalRequest';
+
 
 const ProfileEditPage = () => {
+
+
+    const dispatch = useDispatch();
+
+    // Récupération des codes postaux et état de chargement
+    const codepostals = useSelector((state) => state.codepostals.codepostals);
+    const loadingUser = useSelector((state) => state.users.loadingUser);
+    // Charger les codes postaux au montage du composant
+    useEffect(() => {
+        dispatch(fetchCodePostalsAll());
+    }, [dispatch]);
 
 
     const [formData, setFormData] = useState({
@@ -11,6 +28,7 @@ const ProfileEditPage = () => {
         email: '',
         phone: '',
         codePostal: '',
+        description: "",
         images: [],
         address: '',
         addressPostal: '',
@@ -34,6 +52,13 @@ const ProfileEditPage = () => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+
+
+    const handleDescriptionChange = (value) => {
+        setFormData({ ...formData, description: value });
+    };
+
+
 
     // Gestion de l'ajout des images
     const handleImageUpload = (e) => {
@@ -262,13 +287,19 @@ const ProfileEditPage = () => {
 
                                     <div className="col-sm-6">
                                         <label>Indicatif téléphone</label>
-                                        <input
-                                            type="tel"
+                                        <select
                                             name="codePostal"
                                             className="form-control"
-                                            value={formData.codePostal} // Valeur actuelle
-                                            onChange={(e) => handleChange(e)} // Gestion des changements
-                                        />
+                                            value={formData.codePostal}
+                                            onChange={(e) => handleChange(e)}
+                                        >
+                                            <option value="">-- Sélectionnez un indicatif --</option>
+                                            {codepostals.map((postal) => (
+                                                <option key={postal._id} value={postal._id}>
+                                                    +{postal.indicatif} - {postal.country}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
 
                                     <div className="col-sm-6">
@@ -279,6 +310,17 @@ const ProfileEditPage = () => {
                                             className="form-control"
                                             value={formData.address} // Valeur actuelle
                                             onChange={(e) => handleChange(e)} // Gestion des changements
+                                        />
+                                    </div>
+
+                                    <div className="col-sm-12">
+                                        <label>Description </label>
+                                        <ReactQuill
+                                            theme="snow"
+                                            value={formData.description}
+                                            onChange={handleDescriptionChange}
+                                            placeholder="Ajoutez une description détaillée ici..."
+                                            style={{ height: "150px" }}
                                         />
                                     </div>
                                 </div>

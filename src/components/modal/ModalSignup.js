@@ -149,7 +149,8 @@ const ModalSignup = () => {
 									value={formData.codePostal}
 									onChange={handleChange}
 								>
-									<option value="">-- Sélectionnez --</option>
+								<option value="">-- Sélectionnez un indicatif --</option>
+
 									{codepostals.map((postal) => (
 										<option key={postal._id} value={postal._id}>
 											+{postal.indicatif} - {postal.country}
