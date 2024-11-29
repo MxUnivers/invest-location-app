@@ -91,7 +91,7 @@ function SearchPage(props) {
                 <div class="row mrg-r-10 mrg-l-10">
 
                   <div class="col-md-12">
-                    <h5 class="mrg-bot-10">Catégories</h5>
+                    <h5 class="mrg-bot-10">Filtre</h5>
                   </div>
 
                   <div className="col-md-4 col-sm-4 no-padd">
@@ -104,7 +104,7 @@ function SearchPage(props) {
                     />
                   </div>
                   <div className="col-sm-3">
-                    <label>Localité  <span className="text-danger">*</span></label>
+                    
                     <select
                       name="region"
                       className="form-control"
@@ -120,7 +120,7 @@ function SearchPage(props) {
                   </div>
 
                   <div className="col-sm-3">
-                    <label>Catégorie  <span className="text-danger">*</span></label>
+                    
                     <select
                       name="category"
                       className="form-control"

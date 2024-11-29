@@ -8,6 +8,7 @@ import adminReducer from './reducers/adminReducer';
 import categoryReducer from './reducers/categoryReducer';
 import publicationReducer from './reducers/publicationReducer';
 import regionReducer from './reducers/regionReducer';
+import reviewReducer from './reducers/reviewReducer';
 
 
 
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     categorys :categoryReducer,
     regions :regionReducer,
     codepostals:codepostalReducer,
+    reviews:reviewReducer,
     language:languageReducer,
     publications:publicationReducer,
     users: userReducer,

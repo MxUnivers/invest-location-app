@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { MdLocationCity, MdStarBorder, MdStarRate } from "react-icons/md";
+import React, { useEffect, useState } from 'react'
+import { MdLocationCity, MdPerson, MdStarBorder, MdStarRate } from "react-icons/md";
 import { GoogleApiWrapper, Map, Marker } from "google-maps-react";
 import { profilePictureDefault } from '../../config/dataApi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +9,9 @@ import { getAndCheckLocalStorage } from '../../config/localvalueFuction';
 import { localStorageData, localStorageKeys } from '../../config/localvalue';
 import { FETCH_USERS_REQUEST, FETCH_USER_SUCCESS } from '../../app/actions/actions';
 import { getDataFromFile } from '../../actions/DataLocal';
+import moment from 'moment/moment';
+import { ReviewCreate, fetchReviewsAll } from '../../actions/request/ReviewRequest';
+import { toast } from 'react-toastify';
 
 // Remplacez par votre propre clé API Google Maps
 const mapStyles = {
@@ -23,8 +26,8 @@ export const ProfileSideBarLeft = (props) => {
 
     const dispatch = useDispatch();
     const user = useSelector((state) => state.users.user);
-
-
+    const reviews = useSelector((state) => state.reviews.reviews);
+    const loadingReview = useSelector((state) => state.reviews.loadingReview);
 
     const params = useParams();
 
@@ -37,11 +40,28 @@ export const ProfileSideBarLeft = (props) => {
     }, [dispatch])
 
     useEffect(() => {
-        dispatch(fetchUsersAll())
-        dispatch(fetchUserById(id || getAndCheckLocalStorage(localStorageKeys?.userId)));
-    });
+        dispatch(fetchReviewsAll("", "", id))
+    }, [dispatch]);
 
 
+    const [contentReview, setcontentReview] = useState();
+
+    const sendCreate = (e) => {
+        if (!getAndCheckLocalStorage(localStorageKeys.userId)) {
+            toast.error("Vous n'êtes pas connecté", { position: "bottom-right" });
+            return;
+        }
+        if (!contentReview) {
+            toast.error("Votre commentaire est vide", { position: "bottom-right" });
+            return;
+        }
+        dispatch(ReviewCreate({
+            user: getAndCheckLocalStorage(localStorageKeys.userId),
+            userTestimonial: getAndCheckLocalStorage(localStorageKeys.userId),
+            content: contentReview
+        }))
+        dispatch(fetchReviewsAll("", "", id))
+    }
 
 
     const location = {
@@ -50,29 +70,8 @@ export const ProfileSideBarLeft = (props) => {
     };
 
 
-    const reviews = [
-        {
-            author: "Lucas Dupont",
-            avatar: profilePictureDefault,
-            stars: 4, // Nombre d'étoiles
-            date: "il y a 4 semaines",
-            content: "Le service est excellent et très réactif. L'équipe a répondu à toutes mes questions rapidement. Cependant, j'ai rencontré quelques problèmes techniques au début, mais ils ont été résolus rapidement.",
-        },
-        {
-            author: "Sophie Martin",
-            avatar: profilePictureDefault,
-            stars: 3,
-            date: "il y a 3 semaines",
-            content: "Le produit est bon dans l'ensemble, mais il y a quelques améliorations possibles. Je recommande quand même pour ceux qui cherchent une solution simple et efficace.",
-        },
-        {
-            author: "Paul Leblanc",
-            avatar: profilePictureDefault,
-            stars: 5,
-            date: "il y a 2 semaines",
-            content: "Une expérience parfaite ! Tout a été conforme à mes attentes, et j'ai apprécié le suivi après-vente. Je recommande vivement ce service à tout le monde.",
-        }
-    ];
+
+
 
 
 
@@ -157,7 +156,7 @@ export const ProfileSideBarLeft = (props) => {
                         <h3>{user?.address || ""}</h3>
                     </div>
                     <div className="detail-wrapper-body">
-                        <Map 
+                        <Map
                             google={props.google}
                             zoom={14}
                             style={mapStyles}
@@ -183,20 +182,19 @@ export const ProfileSideBarLeft = (props) => {
                                     <li>
                                         <div class="reviews-box">
                                             <div class="review-body">
-                                                <div class="review-avatar">
-                                                    <img alt={review.user?.profilePicture || profilePictureDefault } src={review.user?.firtname || "utilisateur"} class="avatar avatar-140 photo" />
+                                                <div class="review-avatar" style={{ display:"flex", justifyContent:"center" ,alignContent:"center",alignItems:"center" }}>
+                                                    <MdPerson size={50}/>
                                                 </div>
                                                 <div class="review-content">
                                                     <div class="review-info">
                                                         <div class="review-comment">
-                                                            <div class="review-author">{review.author}</div>
+                                                            <div class="review-author">{review.user?.firstname} {review.user?.lastname}</div>
                                                             <div class="review-comment-stars">
-
                                                             </div>
                                                         </div>
                                                         <div class="review-comment-date">
                                                             <div class="review-date">
-                                                                <span>{review.date}</span>
+                                                                <span>{moment(review?.createdAt).format("DD-MM-YYYY")}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -231,17 +229,12 @@ export const ProfileSideBarLeft = (props) => {
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" placeholder="Nom complet*" />
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="email" class="form-control" placeholder="Addresse Email*" />
+
+                        <div class="col-sm-12">
+                            <textarea class="form-control height-110" value={contentReview} onChange={(e) => { setcontentReview(e.target.value) }} placeholder="Dite en plus..."></textarea>
                         </div>
                         <div class="col-sm-12">
-                            <textarea class="form-control height-110" placeholder="Dite en plus..."></textarea>
-                        </div>
-                        <div class="col-sm-12">
-                            <button type="button" class="btn theme-btn">Soumettre</button>
+                            <button type="button" onClick={sendCreate} class="btn theme-btn">Soumettre</button>
                         </div>
                     </div>
                 </div>

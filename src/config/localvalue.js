@@ -34,5 +34,6 @@ export const localStorageData = {
     Regions: "Regions",
     Categorys: "Categorys",
     CodePostals: "CodePostals",
+    Reviews:"Reviews",
     Customers: "Customers"
 }

@@ -1,18 +1,31 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from "google-maps-react";
-import { categoriesSecteurs, profilePictureDefault, villesCoteDIvoire } from "../../config/dataApi";
+import { profilePictureDefault } from "../../config/dataApi";
 import { routing } from "../../config/routing";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUsersAll } from "../../actions/request/UserRequest";
+import { fetchCategorysAll } from "../../actions/request/CategoryRequest";
+import { fetchRegionysAll } from "../../actions/request/RegionRequest";
 
 export function ProfileMapList({ google }) {
 
   const dispatch = useDispatch();
   const profiles = useSelector((state) => state.users.users);
 
+  const categoriesSecteurs = useSelector((state) => state.categorys.categorys)
+  const villesCoteDIvoire = useSelector((state) => state.regions.regions)
+
   useEffect(() => {
     dispatch(fetchUsersAll());
+    dispatch(fetchCategorysAll());
+    dispatch(fetchRegionysAll());
   }, [dispatch])
+
+
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedLocality, setSelectedLocality] = useState("");
 
 
 
@@ -30,7 +43,7 @@ export function ProfileMapList({ google }) {
   const onMarkerClick = (profile, marker) => {
     setSelectedProfile(profile);
     setShowingInfoWindow(true);
-    window.location.href = `/${routing.profile_view}/`+profile?._id
+    window.location.href = `/${routing.profile_view}/` + profile?._id
   };
 
   // Fonction pour fermer le popup d'info
@@ -60,7 +73,7 @@ export function ProfileMapList({ google }) {
                     lat: profile?.lat,
                     lng: profile?.lng,
                   }}
-                  
+
 
                   onClick={() => onMarkerClick(profile)}
                   icon={{
@@ -109,55 +122,39 @@ export function ProfileMapList({ google }) {
       <div className="search-inner abs-map-search">
         <div className="container">
           <form className="form-verticle">
-            <div className="col-md-4 col-sm-4 no-padd">
-              <input
-                type="text"
-                className="form-control left-radius right-br"
-                placeholder="Mot clé"
-              />
-            </div>
-            <div className="col-md-3 col-sm-3 no-padd">
-              <select
-                className="selectpicker form-control"
-                data-live-search="true"
-              >
-                <option data-tokens="ketchup mustard">
-                  Choisir localité
-                </option>
-                {
-                  villesCoteDIvoire.map((item) => {
-                    return (
-                      <option value={item} data-tokens="ketchup mustard">
-                        {item}
-                      </option>
-                    )
-                  })
-                }
 
+
+            <div className="col-sm-4">
+              <select
+                name="region"
+                className="form-control"
+                onChange={(e) => setSelectedLocality(e.target.value)}
+              >
+                <option value="">-- Localité --</option>
+                {villesCoteDIvoire.map((postal) => (
+                  <option key={postal._id} value={postal._id}>
+                    {postal?.name || ""}
+                  </option>
+                ))}
               </select>
             </div>
-            <div className="col-md-3 col-sm-3 no-padd">
-              <select
-                className="selectpicker form-control"
-                data-live-search="true"
-              >
-                <option data-tokens="ketchup mustard">
-                  Choisir categorie
-                </option>
-                {
-                  categoriesSecteurs.map((item) => {
-                    return (
-                      <option value={item.value} data-tokens="ketchup mustard">
-                        {item.name}
-                      </option>
-                    )
-                  })
-                }
 
+            <div className="col-sm-4">
+              <select
+                name="category"
+                className="form-control"
+                onChange={(e) => setSelectedCategory(e.target.value)}
+              >
+                <option value="">-- Catéogorie --</option>
+                {categoriesSecteurs.map((postal) => (
+                  <option key={postal._id} value={postal._id}>
+                    {postal?.name || ""}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="col-md-2 col-sm-2 no-padd">
-              <button
+              <button onClick={() => { window.location.href = `/${routing.search}` }}
                 type="button"
                 className="btn theme-btn btn-default height-50 full-width"
               >
