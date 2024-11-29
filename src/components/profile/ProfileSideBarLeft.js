@@ -89,11 +89,11 @@ export const ProfileSideBarLeft = (props) => {
             <div class="detail-wrapper">
                 <div class="detail-wrapper-body">
                     <div class="listing-title-bar">
-                        {user?.category?.name && <h3>{user?.companyName || ""}<span class="mrg-l-5 category-tag">{user?.category?.name || ""}</span></h3>}
+                        {user?.category?.name && <h3 style={{ fontSize:"30px" }}>{user?.companyName || ""}<span class="mrg-l-5 category-tag" style={{ fontSize:"20px" }}>{user?.category?.name || ""}</span></h3>}
                         <div>
                             {
                                 user?.address &&
-                                <a href="#listing-location" class="listing-address">
+                                <a href="#listing-location" class="listing-address" style={{ fontSize:"20px" }}>
                                     <i class="ti-location-pin mrg-r-5"></i>
                                     {user?.address || ""}
                                 </a>
@@ -102,13 +102,12 @@ export const ProfileSideBarLeft = (props) => {
 
                             <div class="rating-box">
                                 <div class="detail-list-rating">
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
+                                {[...Array(5)].map((_, i) => (
+                                    <i key={i} className={i < Math.floor(user?.rating || 1) ? "color fa fa-star" : "fa fa-star"}
+                                        aria-hidden="true"></i>
+                                ))}
                                 </div>
-                                <a href="#" class="detail-rating-count">47 Avis</a>
+                                <a href="#" class="detail-rating-count">{reviews?.length} Avis</a>
                             </div>
                         </div>
                     </div>
@@ -120,7 +119,7 @@ export const ProfileSideBarLeft = (props) => {
             }
             <div class="detail-wrapper">
                 <div class="detail-wrapper-header">
-                    <h4>Description</h4>
+                    <h4 style={{ fontSize:"20px" }}>Description</h4>
                 </div>
                 {
                     user?.description ?
@@ -135,7 +134,7 @@ export const ProfileSideBarLeft = (props) => {
 
             </div>
 
-            <div class="detail-wrapper">
+            {/*<div class="detail-wrapper">
                 <div class="detail-wrapper-header">
                     <h4>Services</h4>
                 </div>
@@ -146,14 +145,14 @@ export const ProfileSideBarLeft = (props) => {
                     </ul>
                 </div>
 
-            </div>
+            </div>*/}
 
             {
                 location?.lat && location.lng &&
                 <div className="" style={{ height: "450px", width: "500px" }}>
                     <div className="detail-wrapper-header">
                         <h4 style={{ fontWeight: "700", fontSize: "20px" }}> Locatisation</h4>
-                        <h3>{user?.address || ""}</h3>
+                        <h3 style={{ fontSize:"15px" }}>{user?.address || ""}</h3>
                     </div>
                     <div className="detail-wrapper-body">
                         <Map
@@ -171,7 +170,7 @@ export const ProfileSideBarLeft = (props) => {
 
             <div class="detail-wrapper">
                 <div class="detail-wrapper-header">
-                    <h4>Commentaires</h4>
+                    <h4 style={{ fontSize:"20px" }}>Commentaires</h4>
                 </div>
                 <div class="detail-wrapper-body">
                     <ul class="review-list">
@@ -212,19 +211,19 @@ export const ProfileSideBarLeft = (props) => {
 
             <div class="detail-wrapper">
                 <div class="detail-wrapper-header">
-                    <h4>Rediger votre commentaire</h4>
+                    <h4 style={{ fontSize:"20px" }}>Rediger votre commentaire</h4>
                 </div>
                 <div class="detail-wrapper-body">
 
                     <div class="row mrg-bot-10">
                         <div class="col-md-12">
-                            <div class="rating-opt">
+                            {/*<div class="rating-opt">
                                 <div class="jr-ratenode jr-nomal"></div>
                                 <div class="jr-ratenode jr-nomal "></div>
                                 <div class="jr-ratenode jr-nomal "></div>
                                 <div class="jr-ratenode jr-nomal "></div>
                                 <div class="jr-ratenode jr-nomal "></div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 

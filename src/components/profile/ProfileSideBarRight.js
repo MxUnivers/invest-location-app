@@ -61,7 +61,7 @@ const ProfileSideBarRight = () => {
         </div> */}
                 <div class="widget-boxed">
                     <div class="widget-boxed-header">
-                        <h4><i class="ti-time padd-r-10"></i>Heure d{"'"}ouverture</h4>
+                        <h4  style={{ fontSize:"20px" }}><i class="ti-time padd-r-10" style={{ fontSize:"20px" }}></i>Heure d{"'"}ouverture</h4>
                     </div>
                     <div class="widget-boxed-body">
                         <div class="side-list">
@@ -83,7 +83,7 @@ const ProfileSideBarRight = () => {
 
                 <div class="widget-boxed">
                     <div class="widget-boxed-header">
-                        <h4><i class="ti-gallery padd-r-10"></i>Photo des activités</h4>
+                        <h4 style={{ fontSize:"20px" }} ><i class="ti-gallery padd-r-10" style={{ fontSize:"25px" }}></i>Photo des activités</h4>
                     </div>
                     <div class="widget-boxed-body">
                         <div class="side-list no-border gallery-box">

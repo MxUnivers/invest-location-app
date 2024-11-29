@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { UserConnexion } from "../../actions/request/UserRequest";
+import { FETCH_USER_SUCCESS } from "../../app/actions/actions";
 
 const ModalSignin = () => {
 
 	const  dispatch  =  useDispatch();
+	useEffect(() => {
+		dispatch({ type: FETCH_USER_SUCCESS});
+	}, [])
+	
 
 	const loadingUser = useSelector((state) => state.users.loadingUser);
 	const [formData, setFormData] = useState({

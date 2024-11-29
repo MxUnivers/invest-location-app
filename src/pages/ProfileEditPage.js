@@ -43,6 +43,7 @@ const ProfileEditPage = () => {
 
     // Charger les codes postaux au montage du composant
     useEffect(() => {
+        dispatch({ type: FETCH_USER_SUCCESS });
         dispatch(fetchCategorysAll());
         dispatch(fetchRegionysAll());
         dispatch(fetchCodePostalsAll());
@@ -78,33 +79,33 @@ const ProfileEditPage = () => {
     function fetchUserByGet() {
         return async (dispatch) => {
 
-            const users = getDataFromFile(localStorageData.Users) || []
-            console.log(users)
-            const userGet =  users.find((item)=> item && item._id == getAndCheckLocalStorage(localStorageKeys.userId)) || {};
-            console.log(userGet);
+            // const users = getDataFromFile(localStorageData.Users) || []
+            // console.log(users)
+            // const userGet =  users.find((item)=> item && item._id == getAndCheckLocalStorage(localStorageKeys.userId)) || {};
+            // console.log(userGet);
 
 
-            setFormData(
-                {
-                    firstname: userGet?.firstname,
-                    lastname: userGet?.lastname,
-                    email: userGet?.email,
-                    phone: userGet?.phone,
-                    codePostal: userGet?.codePostal?._id,
-                    profilePicture: userGet?.profilePicture,
-                    profession: userGet?.profession,
-                    address: userGet?.address,
-                    schedule: userGet?.schedule || {},
-                    images: userGet?.images ||  [],
-                    description: userGet?.description,
-                    lat: userGet?.lat,
-                    lng: userGet?.lng,
-                    companyName: userGet?.companyName,
-                    category: userGet?.category?._id,
-                    region: userGet?.region?._id,
-                }
-            )
-            setPickupLocation(userGet?.address)
+            // setFormData(
+            //     {
+            //         firstname: userGet?.firstname,
+            //         lastname: userGet?.lastname,
+            //         email: userGet?.email,
+            //         phone: userGet?.phone,
+            //         codePostal: userGet?.codePostal?._id,
+            //         profilePicture: userGet?.profilePicture,
+            //         profession: userGet?.profession,
+            //         address: userGet?.address,
+            //         schedule: userGet?.schedule || {},
+            //         images: userGet?.images ||  [],
+            //         description: userGet?.description,
+            //         lat: userGet?.lat,
+            //         lng: userGet?.lng,
+            //         companyName: userGet?.companyName,
+            //         category: userGet?.category?._id,
+            //         region: userGet?.region?._id,
+            //     }
+            // )
+            // setPickupLocation(userGet?.address)
 
 
 
@@ -153,7 +154,7 @@ const ProfileEditPage = () => {
 
 
 
-    
+
     // Gestion des changements dans les champs de formulaire
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -231,7 +232,7 @@ const ProfileEditPage = () => {
 
 
 
-    
+
 
     // Obtenir les suggestions de lieu de départ
     const getPlacesByCountryStartLocation = async (query) => {
@@ -357,31 +358,35 @@ const ProfileEditPage = () => {
                                         </div>
 
                                         <div className="row">
-                                            {daysOfWeek.map((day) => (
+                                            {daysOfWeek.map((day) =>
+
+                                            (
                                                 <div key={day} className="col-sm-4">
                                                     <div className="day-selector">
                                                         <button
-                                                            className={`btn ${formData.schedule[day] ? 'btn-primary' : 'btn-default'}`}
+                                                            className={`btn ${formData && formData.schedule && formData.schedule[day] ? 'btn-primary' : 'btn-default'}`}
                                                             onClick={() => handleDayClick(day)}
                                                         >
-                                                            {day}
+                                                            {day || ""}
                                                         </button>
-                                                        {formData.schedule[day] && (
-                                                            <div className="hour-selector">
-                                                                {hours.map((hour) => (
-                                                                    <button
-                                                                        key={hour}
-                                                                        className={`btn btn-sm ${formData.schedule[day].includes(hour)
-                                                                            ? 'btn-success'
-                                                                            : 'btn-outline-secondary'
-                                                                            }`}
-                                                                        onClick={() => handleTimeToggle(day, hour)}
-                                                                    >
-                                                                        {hour}
-                                                                    </button>
-                                                                ))}
-                                                            </div>
-                                                        )}
+                                                        {
+                                                            formData && formData.schedule &&
+                                                            formData.schedule[day] && (
+                                                                <div className="hour-selector">
+                                                                    {hours.map((hour) => (
+                                                                        <button
+                                                                            key={hour}
+                                                                            className={`btn btn-sm ${formData.schedule[day].includes(hour)
+                                                                                ? 'btn-success'
+                                                                                : 'btn-outline-secondary'
+                                                                                }`}
+                                                                            onClick={() => handleTimeToggle(day, hour)}
+                                                                        >
+                                                                            {hour}
+                                                                        </button>
+                                                                    ))}
+                                                                </div>
+                                                            )}
                                                     </div>
                                                 </div>
                                             ))}
@@ -396,19 +401,23 @@ const ProfileEditPage = () => {
                                             <h3>Résumé des Disponibilités</h3>
                                             <p>Voici un aperçu des créneaux sélectionnés</p>
                                         </div>
-                                        <div>
-                                            {Object.keys(formData.schedule).length === 0 ? (
-                                                <p>Aucune disponibilité sélectionnée.</p>
-                                            ) : (
-                                                <ul>
-                                                    {Object.entries(formData.schedule).map(([day, times]) => (
-                                                        <li key={day}>
-                                                            <strong>{day} :</strong> {times.join(', ')}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
-                                        </div>
+                                        {
+                                            formData && formData.schedule &&
+                                            <div>
+                                                {Object.keys(formData.schedule).length === 0 ? (
+                                                    <p>Aucune disponibilité sélectionnée.</p>
+                                                ) : (
+                                                    <ul>
+                                                        {Object.entries(formData.schedule).map(([day, times]) => (
+                                                            <li key={day}>
+                                                                <strong>{day} :</strong> {times.join(', ')}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+                                            </div>
+                                        }
+
                                     </div>
                                 </Col>
                             </Row>

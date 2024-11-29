@@ -31,7 +31,7 @@ const ProfileBarner = () => {
 
             <div class="clearfix"></div>
 
-            <section class="detail-section bg-image" style={{ background: `url(${  user && user?.images && user?.images.length > 0 ? user?.images[0] : imageBgEmpty })` }} data-overlay="6">
+            <section class="detail-section bg-image" style={{ background: `url(${  user && user.images && user.images.length > 0 ? user.images[0] : imageBgEmpty })` }} data-overlay="6">
                 <div class="profile-cover-content">
                     <div class="container">
                         <div class="cover-buttons">
@@ -58,8 +58,8 @@ const ProfileBarner = () => {
                                 <img src={user?.profilePicture || profilePictureDefault} class="img-responsive img-circle" alt="" />
                             </div>
                             <div class="listing-owner-detail">
-                                <h4>{user?.firstname || ""} {user?.lastname || ""}</h4>
-                                <span class="theme-cl">{user?.profession || ""}</span>
+                                <h4 style={{ fontWeight:"700", fontSize:"20px" }}>{user?.firstname || ""} {user?.lastname || ""}</h4>
+                                <span class="theme-cl" style={{ fontSize:"15px" }}>{user?.profession || ""}</span>
                             </div>
                         </div>
                     </div>

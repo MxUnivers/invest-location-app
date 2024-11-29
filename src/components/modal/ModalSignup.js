@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { UserCreate } from "../../actions/request/UserRequest";
+import { FETCH_USER_SUCCESS } from "../../app/actions/actions";
 
 const ModalSignup = () => {
 	const navigate = useNavigate();
@@ -29,6 +30,7 @@ const ModalSignup = () => {
 
 	// Charger les codes postaux au montage du composant
 	useEffect(() => {
+		dispatch({ type: FETCH_USER_SUCCESS });
 		dispatch(fetchCodePostalsAll());
 	}, [dispatch]);
 
