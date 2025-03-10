@@ -70,7 +70,7 @@ const ProfileEditPage = () => {
         profilePicture: '',
         lat: '',
         lng: '',
-        schedule: ""
+        schedule: {}
     });
 
 
@@ -79,33 +79,33 @@ const ProfileEditPage = () => {
     function fetchUserByGet() {
         return async (dispatch) => {
 
-            // const users = getDataFromFile(localStorageData.Users) || []
-            // console.log(users)
-            // const userGet =  users.find((item)=> item && item._id == getAndCheckLocalStorage(localStorageKeys.userId)) || {};
-            // console.log(userGet);
+            const users = getDataFromFile(localStorageData.Users) || []
+            console.log(users)
+            const userGet =  users.find((item)=> item && item._id == getAndCheckLocalStorage(localStorageKeys.userId)) || {};
+            console.log(userGet);
 
 
-            // setFormData(
-            //     {
-            //         firstname: userGet?.firstname,
-            //         lastname: userGet?.lastname,
-            //         email: userGet?.email,
-            //         phone: userGet?.phone,
-            //         codePostal: userGet?.codePostal?._id,
-            //         profilePicture: userGet?.profilePicture,
-            //         profession: userGet?.profession,
-            //         address: userGet?.address,
-            //         schedule: userGet?.schedule || {},
-            //         images: userGet?.images ||  [],
-            //         description: userGet?.description,
-            //         lat: userGet?.lat,
-            //         lng: userGet?.lng,
-            //         companyName: userGet?.companyName,
-            //         category: userGet?.category?._id,
-            //         region: userGet?.region?._id,
-            //     }
-            // )
-            // setPickupLocation(userGet?.address)
+            setFormData(
+                {
+                    firstname: userGet?.firstname,
+                    lastname: userGet?.lastname,
+                    email: userGet?.email,
+                    phone: userGet?.phone,
+                    codePostal: userGet?.codePostal?._id,
+                    profilePicture: userGet?.profilePicture,
+                    profession: userGet?.profession,
+                    address: userGet?.address,
+                    schedule: userGet?.schedule || {},
+                    images: userGet?.images ||  [],
+                    description: userGet?.description,
+                    lat: userGet?.lat,
+                    lng: userGet?.lng,
+                    companyName: userGet?.companyName,
+                    category: userGet?.category?._id,
+                    region: userGet?.region?._id,
+                }
+            )
+            setPickupLocation(userGet?.address)
 
 
 
@@ -119,7 +119,7 @@ const ProfileEditPage = () => {
                         'Authorization': `${baseurl.TypeToken} ${baseurl.token}`
                     }
                 }).then((response) => {
-                    console.log(response.data.data);
+                    // console.log(response.data.data);
                     const responseData = response.data.data;
                     dispatch({ type: FETCH_USER_SUCCESS, payload: response.data.data });
                     setFormData(
@@ -132,7 +132,7 @@ const ProfileEditPage = () => {
                             profilePicture: responseData?.profilePicture,
                             profession: responseData?.profession,
                             address: responseData?.address,
-                            schedule: responseData?.schedule,
+                            schedule: responseData?.schedule || {},
                             images: responseData?.images,
                             description: responseData?.description,
                             lat: responseData?.lat,
@@ -146,7 +146,7 @@ const ProfileEditPage = () => {
                 })
                 .catch((error) => {
                     dispatch({ type: FETCH_USER_FAILURE, payload: error.message })
-                    console.log(error);
+                    // console.log(error);
                 });
         }
     }
@@ -204,25 +204,28 @@ const ProfileEditPage = () => {
             ...prev,
             schedule: {
                 ...prev.schedule,
-                [day]: prev.schedule[day] ? undefined : [], // Si déjà sélectionné, on désélectionne
+                [day]: prev.schedule[day] || [], // Initialise comme un tableau vide si non défini
             },
         }));
     };
 
     const handleTimeToggle = (day, hour) => {
         setFormData((prev) => {
-            const updatedDay = prev.schedule[day] || [];
+            const updatedDay = prev.schedule?.[day] || [];
             const updatedHours = updatedDay.includes(hour)
-                ? updatedDay.filter((h) => h !== hour) // Retirer l'heure
-                : [...updatedDay, hour]; // Ajouter l'heure
-
+                ? updatedDay.filter((h) => h !== hour)
+                : [...updatedDay, hour];
+    
             return {
                 ...prev,
-                schedule: { ...prev.schedule, [day]: updatedHours },
+                schedule: {
+                    ...prev.schedule,
+                    [day]: updatedHours,
+                },
             };
         });
     };
-
+    
 
 
 
@@ -358,38 +361,35 @@ const ProfileEditPage = () => {
                                         </div>
 
                                         <div className="row">
-                                            {daysOfWeek.map((day) =>
-
-                                            (
-                                                <div key={day} className="col-sm-4">
-                                                    <div className="day-selector">
-                                                        <button
-                                                            className={`btn ${formData && formData.schedule && formData.schedule[day] ? 'btn-primary' : 'btn-default'}`}
-                                                            onClick={() => handleDayClick(day)}
-                                                        >
-                                                            {day || ""}
-                                                        </button>
-                                                        {
-                                                            formData && formData.schedule &&
-                                                            formData.schedule[day] && (
-                                                                <div className="hour-selector">
-                                                                    {hours.map((hour) => (
-                                                                        <button
-                                                                            key={hour}
-                                                                            className={`btn btn-sm ${formData.schedule[day].includes(hour)
-                                                                                ? 'btn-success'
-                                                                                : 'btn-outline-secondary'
-                                                                                }`}
-                                                                            onClick={() => handleTimeToggle(day, hour)}
-                                                                        >
-                                                                            {hour}
-                                                                        </button>
-                                                                    ))}
-                                                                </div>
-                                                            )}
-                                                    </div>
+                                        {daysOfWeek.map((day) => (
+                                            <div key={day} className="col-sm-4">
+                                                <div className="day-selector">
+                                                    <button
+                                                        className={`btn ${formData.schedule[day] ? 'btn-primary' : 'btn-default'}`}
+                                                        onClick={() => handleDayClick(day)}
+                                                    >
+                                                        {day}
+                                                    </button>
+                                                    {formData.schedule[day] && (
+                                                        <div className="hour-selector">
+                                                            {hours.map((hour) => (
+                                                                <button
+                                                                    key={hour}
+                                                                    className={`btn btn-sm ${formData.schedule[day].includes(hour)
+                                                                        ? 'btn-success'
+                                                                        : 'btn-outline-secondary'
+                                                                        }`}
+                                                                    onClick={() => handleTimeToggle(day, hour)}
+                                                                >
+                                                                    {hour}
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            ))}
+                                            </div>
+                                        ))}
+                                        
                                         </div>
                                     </div>
                                 </Col>
@@ -401,22 +401,17 @@ const ProfileEditPage = () => {
                                             <h3>Résumé des Disponibilités</h3>
                                             <p>Voici un aperçu des créneaux sélectionnés</p>
                                         </div>
-                                        {
-                                            formData && formData.schedule &&
-                                            <div>
-                                                {Object.keys(formData.schedule).length === 0 ? (
-                                                    <p>Aucune disponibilité sélectionnée.</p>
-                                                ) : (
-                                                    <ul>
-                                                        {Object.entries(formData.schedule).map(([day, times]) => (
-                                                            <li key={day}>
-                                                                <strong>{day} :</strong> {times.join(', ')}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                )}
-                                            </div>
-                                        }
+                                        {formData.schedule && Object.keys(formData.schedule).length === 0 ? (
+                                            <p>Aucune disponibilité sélectionnée.</p>
+                                        ) : (
+                                            <ul>
+                                                {Object.entries(formData.schedule).map(([day, times]) => (
+                                                    <li key={day}>
+                                                        <strong>{day} :</strong> {times.join(', ')}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
 
                                     </div>
                                 </Col>
@@ -587,7 +582,7 @@ const ProfileEditPage = () => {
                                                     {pickupSuggestions.map((suggestion, index) => (
                                                         <li className="border border-b"
                                                             key={index}
-                                                            style={{ padding: '5px', cursor: 'pointer', }}
+                                                            style={{ padding: '5px', cursor: 'pointer', fontSize:"20px" }}
                                                             onClick={() => handlePickupSelection(suggestion)}
                                                         >
                                                             {`${suggestion.name} - ${suggestion.formatted_address}`}

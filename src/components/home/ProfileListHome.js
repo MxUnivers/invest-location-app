@@ -49,7 +49,7 @@ const ProfileListHome = () => {
 				<div class="row">
 					<div class="col-md-10 col-md-offset-1">
 						<div class="heading">
-							<h2 style={{ fontSize: "40px" }}>Les <span>Profile les plus populaire</span></h2>
+							<h2 style={{ fontSize: "40px" }}>Les <span>profiles les plus populaire</span></h2>
 							<p>Découvrez les meilleures profile, soigneusement sélectionnées pour vous, dans diverses catégories.
 							</p>
 						</div>
